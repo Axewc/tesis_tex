@@ -2,6 +2,15 @@
 
 Repositorio para la tesis escrita en LaTeX con scripts de análisis en Python.
 
+## Flujo de trabajo
+
+1. **Edita** los archivos `.tex` y `.bib` localmente
+2. **Haz push** a `main`
+3. **GitHub Actions** compila automáticamente el PDF
+4. **Descarga** el PDF desde la pestaña [Actions](../../actions) (artefacto) o desde [Releases](../../releases)
+
+> No necesitas tener LaTeX instalado localmente. Solo edita los `.tex` y el CI se encarga del resto.
+
 ## Estructura del proyecto
 
 ```
@@ -17,29 +26,31 @@ Repositorio para la tesis escrita en LaTeX con scripts de análisis en Python.
 ├── scripts/                 # Scripts de Python para análisis y gráficas
 │   └── generate_figures.py
 ├── requirements.txt         # Dependencias de Python
-└── Makefile                 # Automatización de compilación
+├── Makefile                 # Compilación local (opcional)
+└── .github/workflows/       # GitHub Actions (compilación automática)
+    └── build-thesis.yml
 ```
 
-## Requisitos
+## Compilación automática (GitHub Actions)
 
-### LaTeX
-- TeX Live o MiKTeX con los paquetes: `babel`, `biblatex`, `graphicx`, `amsmath`, `hyperref`
-- `biber` para la bibliografía
+Cada vez que haces push a `main` con cambios en archivos `.tex`, `.bib`, `figures/` o `scripts/`:
 
-### Python
-- Python 3.10+
-- Dependencias: `pip install -r requirements.txt`
+1. Se instalan las dependencias Python
+2. Se ejecutan los scripts para generar figuras
+3. Se compila `main.tex` → `main.pdf` con latexmk
+4. El PDF queda disponible como **artefacto** (30 días) y como **release**
 
-## Uso
+También puedes lanzar la compilación manualmente desde Actions → "Compilar Tesis" → "Run workflow".
+
+## Compilación local (opcional)
+
+Si prefieres compilar localmente también puedes hacerlo:
 
 ```bash
 # Instalar dependencias de Python
 pip install -r requirements.txt
 
-# Generar figuras con Python
-make figures
-
-# Compilar el PDF completo (figuras + LaTeX)
+# Generar figuras y compilar
 make all
 
 # Solo compilar LaTeX

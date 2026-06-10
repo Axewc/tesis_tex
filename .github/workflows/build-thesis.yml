@@ -1,0 +1,66 @@
+name: Compilar Tesis (LaTeX → PDF)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.tex'
+      - '**.bib'
+      - 'figures/**'
+      - 'scripts/**'
+      - 'requirements.txt'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Python y dependencias
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar paquetes Python
+        run: pip install -r requirements.txt
+
+      - name: Generar figuras con Python
+        run: python scripts/generate_figures.py
+
+      - name: Compilar LaTeX a PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          latexmk_use_xelatex: false
+
+      - name: Subir PDF como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: tesis-pdf
+          path: main.pdf
+          retention-days: 30
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Descargar PDF
+        uses: actions/download-artifact@v4.1.7
+        with:
+          name: tesis-pdf
+
+      - name: Crear/Actualizar release con el PDF
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "Última versión de la tesis"
+          body: "PDF generado automáticamente desde el último commit en main."
+          files: main.pdf
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

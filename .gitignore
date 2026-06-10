@@ -25,8 +25,8 @@
 *.run.xml
 *.xdv
 
-# Generated PDF (uncomment if you want to track the final PDF)
-# *.pdf
+# Generated PDF (built by GitHub Actions, no need to track)
+*.pdf
 
 # latexmk
 *.latexmk
