@@ -1,0 +1,145 @@
+% =============================================================================
+%  Capítulo 1 -- Introducción
+% =============================================================================
+\chapter{Introducción}
+\label{cap:introduccion}
+
+\section{Contexto del problema}
+\label{sec:contexto}
+
+Los sistemas de clasificación automática de texto basados en técnicas de
+procesamiento de lenguaje natural (\PLN) se utilizan cada vez con mayor
+frecuencia en procesos como el filtrado automatizado de currículums, la
+moderación de contenido o la categorización de información en plataformas
+digitales. Aunque estos sistemas suelen presentarse como herramientas neutrales
+orientadas a la eficiencia, diversas investigaciones han mostrado que pueden
+reproducir o amplificar desigualdades sociales preexistentes cuando aprenden
+de datos históricos o de patrones lingüísticos asociados a contextos sociales
+específicos. En particular, los modelos de \PLN pueden incorporar sesgos
+provenientes de los datos, del proceso de anotación o del diseño del sistema,
+lo que puede generar resultados sistemáticamente desfavorables para ciertos
+grupos sociales \cite{HovySpruit2016,HovyPrabhumoye2021}.
+
+Desde la sociolingüística se ha documentado que el uso del lenguaje varía de
+acuerdo con factores como el nivel educativo, la clase social o el contexto
+cultural, y que estas variaciones pueden ser objeto de estigmatización o
+discriminación. La \emph{discriminación lingüística} ocurre cuando determinados
+registros, dialectos o estilos de habla se asocian con juicios negativos sobre
+la capacidad, la inteligencia o la credibilidad de una persona, reproduciendo
+jerarquías sociales preexistentes \cite{Drozdzowicz2024,Weissler2022}. En
+entornos digitales mediados por algoritmos, estas asociaciones podrían
+trasladarse a sistemas automatizados que procesan lenguaje natural, generando
+respuestas diferenciadas ante variaciones sociolectales que no afectan el
+contenido sustantivo de la información.
+
+\section{Planteamiento del problema}
+\label{sec:planteamiento}
+
+A pesar del creciente uso de sistemas de \PLN en procesos con consecuencias
+sociales relevantes, la mayoría de las evaluaciones de equidad disponibles en
+la literatura se han centrado en atributos demográficos categóricos
+---típicamente género, raza o edad--- y en lenguas distintas del español. La
+dimensión \emph{sociolectal}, entendida aquí como variación lingüística
+asociada a factores socioeconómicos, ha recibido menos atención sistemática,
+particularmente en el español hablado en México. Como consecuencia, no se
+dispone de instrumentos estandarizados para evaluar si un clasificador de
+texto responde de manera consistente cuando se le presenta el mismo contenido
+informativo expresado en registros distintos.
+
+Este vacío instrumental tiene implicaciones prácticas. En procesos como el
+filtrado automatizado de currículums, un comportamiento sistemáticamente
+distinto del modelo ante variaciones de registro puede traducirse en
+desventajas concretas para personas cuyo estilo de escritura difiere del
+registro dominante en los datos de entrenamiento, sin que ello refleje
+diferencias reales en el contenido evaluado.
+
+\section{Pregunta de investigación}
+\label{sec:pregunta}
+
+\begin{citablock}
+¿En qué medida los sistemas de clasificación automatizada de texto presentan
+sesgos asociados al registro lingüístico o sociolectal, y cómo puede diseñarse
+un indicador que permita evaluar su neutralidad frente a estas variaciones?
+\end{citablock}
+
+\section{Objetivos}
+\label{sec:objetivos}
+
+\subsection*{Objetivo general}
+
+Analizar la presencia de sesgos asociados al registro lingüístico o sociolectal
+en sistemas de clasificación automatizada de texto, mediante la construcción de
+textos controlados que varían únicamente en su estilo lingüístico, con el
+propósito de evaluar su comportamiento frente a estas variaciones y proponer un
+indicador denominado \emph{Índice de Neutralidad Sociolectal} (\INS) para medir
+el grado de equidad lingüística en dichos sistemas.
+
+\subsection*{Objetivos específicos}
+
+\begin{enumerate}[label=\textbf{O\arabic*.},leftmargin=2.2em]
+  \item Documentar, mediante revisión de literatura académica y reportes
+    institucionales, cómo el clasismo estructural y la discriminación
+    lingüística se manifiestan en el contexto mexicano y de qué manera podrían
+    reflejarse en sistemas automatizados de procesamiento de lenguaje.
+  \item Diseñar un conjunto de textos o currículums simulados en los que el
+    contenido informativo permanezca constante, variando únicamente el
+    registro lingüístico, con el fin de construir un conjunto de pruebas
+    controladas para evaluar sistemas de clasificación automática de texto.
+  \item Evaluar el comportamiento de uno o más modelos de clasificación
+    textual frente a las variaciones lingüísticas definidas, comparando sus
+    resultados para identificar posibles diferencias sistemáticas asociadas
+    al estilo de escritura.
+  \item Diseñar y calcular un indicador denominado \emph{Índice de Neutralidad
+    Sociolectal} (\INS) que permita medir el grado de consistencia o variación
+    en las respuestas del sistema ante cambios en el registro lingüístico.
+\end{enumerate}
+
+\section{Alcances y limitaciones}
+\label{sec:alcances}
+
+\paragraph{Alcances.} El estudio se restringe a sistemas de clasificación
+automática de texto sobre lengua española, con énfasis en el español hablado
+en México. La evaluación experimental se circunscribe a uno o más modelos de
+clasificación seleccionados explícitamente en el Capítulo~\ref{cap:metodologia}
+y al \emph{benchmark} controlado descrito en el Capítulo~\ref{cap:resultados}.
+
+\paragraph{Limitaciones.} Las limitaciones principales del trabajo son tres.
+Primero, el alcance muestral de la encuesta de percepciones no permite
+inferencias representativas a nivel poblacional; sus resultados se interpretan
+como insumo cualitativo para el diseño del \emph{benchmark}. Segundo, el
+\emph{benchmark} controlado opera sobre textos simulados y no captura la
+totalidad de la variación sociolectal observada en datos reales. Tercero, el
+\INS se propone como indicador \emph{preliminar} y su validación empírica
+exhaustiva se identifica como trabajo futuro.
+
+\section{Contribuciones de la tesis}
+\label{sec:contribuciones}
+
+Este trabajo aporta los siguientes elementos.
+
+\begin{itemize}
+  \item Una articulación entre la literatura sobre discriminación lingüística
+    y la de evaluación de sesgos en \PLN, situada en el contexto mexicano.
+  \item Un \emph{benchmark} controlado de textos en distintos registros
+    sociolectales, con contenido informativo equivalente.
+  \item Un protocolo experimental reproducible para evaluar la consistencia
+    de un clasificador frente a variaciones de registro.
+  \item La definición operativa y el cálculo de un indicador, el \INS, sobre
+    los resultados experimentales.
+\end{itemize}
+
+\section{Estructura del documento}
+\label{sec:estructura}
+
+El resto de la tesis se organiza como sigue. El Capítulo~\ref{cap:marco}
+presenta el marco teórico, articulando los conceptos de sesgo algorítmico,
+clasificación automática de texto, discriminación lingüística y clasismo
+estructural en el contexto mexicano. El Capítulo~\ref{cap:metodologia}
+detalla la metodología sociotécnica empleada. El Capítulo~\ref{cap:resultados}
+reporta los resultados de la encuesta de percepciones y de los experimentos
+computacionales. El Capítulo~\ref{cap:ins} define formalmente el \INS,
+describe su procedimiento de cálculo y discute su interpretación. El
+Capítulo~\ref{cap:discusion} discute las implicaciones sociotécnicas de los
+resultados y las limitaciones metodológicas del estudio. El
+Capítulo~\ref{cap:conclusiones} presenta las conclusiones generales y
+delinea líneas de investigación futura.

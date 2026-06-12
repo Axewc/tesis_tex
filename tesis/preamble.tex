@@ -1,0 +1,160 @@
+% =============================================================================
+%  preamble.tex
+%  Configuración general de la tesis. Cargado desde tesis.tex.
+% =============================================================================
+
+% --- Codificación y tipografía ------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}                % Latin Modern (mejor que Computer Modern por defecto)
+\usepackage{textcomp}
+\usepackage{microtype}              % Mejoras tipográficas finas
+
+% --- Idioma -------------------------------------------------------------------
+\usepackage[spanish,es-tabla,es-nodecimaldot,es-noindentfirst]{babel}
+\usepackage{csquotes}               % Comillas correctas; requerido por biblatex
+\selectlanguage{spanish}
+
+% --- Geometría de página (estándar de tesis) ---------------------------------
+\usepackage[letterpaper,
+            inner=3.5cm,            % margen interior (encuadernación)
+            outer=2.5cm,
+            top=3cm,
+            bottom=3cm,
+            headheight=15pt,
+            headsep=1cm,
+            footskip=1.2cm]{geometry}
+
+% --- Interlineado e indentación ---------------------------------------------
+\usepackage{setspace}
+\onehalfspacing                     % 1.5 de interlineado (estándar de tesis)
+\setlength{\parindent}{1.25em}
+\setlength{\parskip}{0.2em plus 0.05em minus 0.05em}
+
+% --- Matemáticas -------------------------------------------------------------
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+
+% --- Gráficos, color y figuras ----------------------------------------------
+\usepackage{graphicx}
+\graphicspath{{imagenes/}}
+\usepackage{xcolor}
+\definecolor{azulUNAM}{HTML}{003B71}
+\definecolor{oroUNAM}{HTML}{C8A047}
+\definecolor{grisCodigo}{HTML}{F4F4F4}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,labelsep=period,format=plain}
+\usepackage{subcaption}
+\usepackage{float}
+
+% --- Tablas ------------------------------------------------------------------
+\usepackage{booktabs}               % \toprule, \midrule, \bottomrule
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+
+% --- Listas ------------------------------------------------------------------
+\usepackage{enumitem}
+\setlist{itemsep=0.25em,topsep=0.3em}
+
+% --- Encabezados y pies ------------------------------------------------------
+\usepackage{fancyhdr}
+\usepackage{emptypage}              % Páginas en blanco verdaderamente en blanco
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\nouppercase{\leftmark}}     % Capítulo
+\fancyhead[LO]{\nouppercase{\rightmark}}    % Sección
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
+
+% --- Formato de capítulos y secciones ---------------------------------------
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{azulUNAM}}
+  {\filright\Large\MakeUppercase{\chaptertitlename}\ \thechapter}
+  {1ex}
+  {\titlerule\vspace{1ex}\filright}
+\titlespacing*{\chapter}{0pt}{-20pt}{30pt}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{azulUNAM!90!black}}{\thesection}{0.75em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries\itshape}{\thesubsubsection}{0.5em}{}
+
+% --- Código fuente (listings) ------------------------------------------------
+\usepackage{listings}
+\lstdefinestyle{python}{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{azulUNAM}\bfseries,
+  commentstyle=\color{gray!80!black}\itshape,
+  stringstyle=\color{oroUNAM!80!black},
+  backgroundcolor=\color{grisCodigo},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  frame=single,
+  rulecolor=\color{gray!40},
+  framerule=0.4pt,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  captionpos=b,
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+           {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+           {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1 {¡}{{!`}}1
+}
+\lstset{style=python}
+\renewcommand{\lstlistingname}{Código}
+\renewcommand{\lstlistlistingname}{Índice de códigos}
+
+% --- Entornos de teoremas (en español) --------------------------------------
+\theoremstyle{definition}
+\newtheorem{definicion}{Definición}[chapter]
+\newtheorem{ejemplo}{Ejemplo}[chapter]
+
+\theoremstyle{plain}
+\newtheorem{teorema}{Teorema}[chapter]
+\newtheorem{proposicion}[teorema]{Proposición}
+\newtheorem{lema}[teorema]{Lema}
+\newtheorem{corolario}[teorema]{Corolario}
+
+\theoremstyle{remark}
+\newtheorem{observacion}{Observación}[chapter]
+
+% --- Bibliografía (biblatex) -------------------------------------------------
+% Si tienes biber instalado, cambia "backend=bibtex" por "backend=biber".
+\usepackage[backend=bibtex,
+            style=ieee,
+            sorting=nyt,
+            block=space,
+            bibencoding=utf8]{biblatex}
+\addbibresource{referencias.bib}
+
+% --- Hipervínculos (debe cargarse casi al final) ----------------------------
+\usepackage[hidelinks,
+            colorlinks=false,
+            pdfstartview=Fit,
+            pdfusetitle,
+            bookmarksnumbered=true]{hyperref}
+
+% --- Comandos personalizados -------------------------------------------------
+\newcommand{\INS}{\textsc{ins}\xspace}
+\newcommand{\PLN}{\textsc{pln}\xspace}
+\newcommand{\NLP}{\textsc{nlp}\xspace}
+\usepackage{xspace}
+
+% Cita en bloque destacada
+\newenvironment{citablock}
+  {\begin{quote}\itshape\small}
+  {\end{quote}}

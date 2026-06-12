@@ -1,0 +1,13 @@
+# Núcleo de análisis (fijar versiones con `pip freeze` al ejecutar)
+numpy
+pandas
+scipy
+scikit-learn
+matplotlib
+seaborn
+# NLP
+spacy
+# Pruebas
+pytest
+# Exploración
+jupyter

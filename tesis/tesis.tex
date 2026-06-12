@@ -1,0 +1,86 @@
+% =============================================================================
+%  tesis.tex
+%  -------------------------------------------------------------------------
+%  Sesgo socioeconómico en modelos de clasificación automática de texto:
+%  un enfoque sociotécnico para su detección y medición
+%
+%  Tesis de Licenciatura en Ciencias de la Computación
+%  Autor:   Axel Casas Espinosa
+%  Asesor:  M. en C.I.C. Manuel Soto Romero
+% =============================================================================
+%
+%  COMPILACIÓN
+%  -----------
+%  Con bibtex (configuración por defecto, no requiere biber):
+%      pdflatex tesis.tex
+%      bibtex   tesis
+%      pdflatex tesis.tex
+%      pdflatex tesis.tex
+%
+%  Con latexmk (recomendado si está disponible):
+%      latexmk -pdf tesis.tex
+%
+%  Con biber (recomendado, requiere editar preamble.tex):
+%      pdflatex tesis.tex
+%      biber    tesis
+%      pdflatex tesis.tex
+%      pdflatex tesis.tex
+% =============================================================================
+
+\documentclass[12pt,letterpaper,twoside,openright]{book}
+
+\input{preamble.tex}
+
+% --- Metadatos del PDF ------------------------------------------------------
+\hypersetup{
+  pdftitle  = {Sesgo socioeconómico en modelos de clasificación automática de texto},
+  pdfauthor = {Axel Casas Espinosa},
+  pdfsubject= {Tesis de Licenciatura en Ciencias de la Computación},
+  pdfkeywords={sesgo algorítmico, procesamiento de lenguaje natural,
+               discriminación lingüística, sociolectos, evaluación sociotécnica}
+}
+
+\begin{document}
+
+% =============================================================================
+%  Materia preliminar (numeración romana)
+% =============================================================================
+\frontmatter
+\pagestyle{plain}
+
+\include{portada}
+
+\include{frontmatter/dedicatoria}
+\include{frontmatter/agradecimientos}
+\include{frontmatter/resumen}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+% =============================================================================
+%  Cuerpo principal (numeración arábiga)
+% =============================================================================
+\mainmatter
+\pagestyle{fancy}
+
+\include{capitulos/01_introduccion}
+\include{capitulos/02_marco_teorico}
+\include{capitulos/03_metodologia}
+\include{capitulos/04_resultados}
+\include{capitulos/05_indice_ins}
+\include{capitulos/06_discusion}
+\include{capitulos/07_conclusiones}
+
+% =============================================================================
+%  Materia posterior (apéndices, bibliografía)
+% =============================================================================
+\appendix
+\include{apendices/A_encuesta}
+\include{apendices/B_corpus_controlado}
+
+\backmatter
+
+\printbibliography[heading=bibintoc,title={Referencias}]
+
+\end{document}

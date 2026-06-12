@@ -1,0 +1,181 @@
+% =============================================================================
+%  Apéndice A -- Instrumento de la encuesta
+%  -------------------------------------------------------------------------
+%  NOTA PARA AXEL:
+%  - Este es un BORRADOR COMPLETO del instrumento, listo para discutir con tu
+%    asesor antes de aplicarlo. Tres decisiones de diseño que debes validar:
+%    (1) escala Likert de 5 puntos con etiqueta en cada punto;
+%    (2) los ítems L7-L9 usan viñetas (mini-escenarios) en vez de preguntas
+%        directas, para reducir deseabilidad social;
+%    (3) las abiertas A1-A4 están ordenadas de lo concreto a lo abstracto.
+%  - Marcas [DECIDIR]: puntos donde la decisión es tuya o de tu asesor.
+%  - Antes de aplicar: pilotear con 5-8 personas y medir tiempo de respuesta
+%    (objetivo: menos de 12 minutos).
+% =============================================================================
+\chapter{Instrumento de la encuesta}
+\label{ap:encuesta}
+
+\section*{Ficha técnica del instrumento}
+
+\begin{description}
+  \item[Título.] Percepciones sobre lenguaje, tecnología y trato diferenciado.
+  \item[Población objetivo.] Personas de 18 a 30 años residentes en México.
+    [DECIDIR: confirmar rango de edad con el asesor.]
+  \item[Modo de aplicación.] Formulario en línea, autoadministrado, anónimo.
+  \item[Duración estimada.] 10--12 minutos.
+  \item[Estructura.] Cuatro secciones: consentimiento informado, datos
+    sociodemográficos, percepciones (escala Likert) y preguntas abiertas.
+\end{description}
+
+\section*{Sección 1. Consentimiento informado}
+
+\begin{quote}
+Esta encuesta forma parte de una investigación de tesis de licenciatura en
+Ciencias de la Computación (UNAM) sobre la relación entre el estilo de
+escritura y el trato que las personas reciben de sistemas automatizados
+(por ejemplo, filtros de currículums o moderación de contenido en plataformas).
+
+Tu participación es \textbf{voluntaria y anónima}: no se solicita tu nombre ni
+ningún dato que permita identificarte. Las respuestas se utilizarán únicamente
+con fines académicos y se reportarán de forma agregada; las respuestas a
+preguntas abiertas podrán citarse textualmente en la tesis sin atribución.
+Puedes abandonar el cuestionario en cualquier momento sin consecuencia alguna.
+
+Responsable: Axel Casas Espinosa (correo de contacto: [DECIDIR]).
+Asesor: M.\ en C.I.C.\ Manuel Soto Romero, Facultad de Ciencias, UNAM.
+
+$\square$ He leído lo anterior y acepto participar.
+\end{quote}
+
+\section*{Sección 2. Datos sociodemográficos}
+
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item Edad (años cumplidos): \rule{2.5cm}{0.4pt}
+  \item Estado de residencia: \rule{5cm}{0.4pt}
+  \item ¿Tu localidad es principalmente...? \quad
+    $\square$ Urbana \quad $\square$ Suburbana \quad $\square$ Rural
+  \item Último nivel educativo concluido: \quad
+    $\square$ Secundaria o menos \quad $\square$ Bachillerato \quad
+    $\square$ Licenciatura \quad $\square$ Posgrado
+  \item ¿Actualmente estudias, trabajas, ambas o ninguna? \quad
+    $\square$ Estudio \quad $\square$ Trabajo \quad $\square$ Ambas \quad
+    $\square$ Ninguna
+  \item Máximo nivel educativo concluido por tu madre o tutor(a) principal:
+    \quad $\square$ Primaria o menos \quad $\square$ Secundaria \quad
+    $\square$ Bachillerato \quad $\square$ Licenciatura o más \quad
+    $\square$ No sé
+  \item Pensando en el hogar donde creciste, ¿con cuál de estas frases lo
+    describirías mejor? \quad
+    $\square$ El dinero no alcanzaba ni para lo básico \quad
+    $\square$ Alcanzaba justo para lo básico \quad
+    $\square$ Alcanzaba para lo básico y algo más \quad
+    $\square$ Vivíamos con holgura
+\end{enumerate}
+
+\noindent\textit{Nota metodológica: D6 y D7 son aproximaciones (proxies) de
+nivel socioeconómico de origen, menos invasivas que preguntar ingreso. Si el
+asesor prefiere un instrumento estandarizado, considerar la regla AMAI
+[DECIDIR].}
+
+\section*{Sección 3. Percepciones (escala Likert)}
+
+\noindent Indica qué tan de acuerdo estás con cada afirmación: \\
+\textbf{1} = Totalmente en desacuerdo \quad \textbf{2} = En desacuerdo \quad
+\textbf{3} = Ni de acuerdo ni en desacuerdo \quad \textbf{4} = De acuerdo
+\quad \textbf{5} = Totalmente de acuerdo
+
+\subsection*{Bloque I. Discriminación lingüística en general}
+
+\begin{enumerate}[label=\textbf{L\arabic*.}]
+  \item En México, la forma de hablar o escribir de una persona influye en
+    cómo la tratan los demás.
+  \item He visto que se juzgue a alguien como menos inteligente o menos capaz
+    por su manera de expresarse.
+  \item Yo he modificado mi forma de hablar o escribir para causar una mejor
+    impresión en contextos formales (escuela, trabajo, trámites).
+  \item Alguna vez me he sentido juzgado(a) o tratado(a) diferente por mi
+    forma de hablar o escribir.
+\end{enumerate}
+
+\subsection*{Bloque II. Tecnología y trato diferenciado}
+
+\begin{enumerate}[label=\textbf{L\arabic*.},resume]
+  \item Creo que los sistemas automatizados (filtros de currículums,
+    moderación en redes, atención por chat) tratan igual a todas las personas
+    sin importar cómo escriban.\footnote{Ítem invertido: se redacta en sentido
+    contrario a los demás para detectar respuesta automática. Recodificar al
+    analizar.}
+  \item Me preocupa que una computadora evalúe mis textos (por ejemplo, mi
+    currículum) sin intervención humana.
+\end{enumerate}
+
+\subsection*{Bloque III. Escenarios}
+
+\noindent\textit{Lee cada situación y responde con la misma escala.}
+
+\begin{enumerate}[label=\textbf{L\arabic*.},resume]
+  \item Dos personas con la misma experiencia laboral envían su currículum
+    a una empresa que usa un filtro automatizado. Una escribe de manera muy
+    formal; la otra, de manera sencilla y directa, con algunos modismos.
+    \textit{Creo que el filtro las evaluaría igual.}\footnotemark[\value{footnote}]
+  \item Si un sistema automatizado rechazara mi solicitud (de empleo, beca o
+    crédito), sospecharía que mi forma de escribir influyó en el resultado.
+  \item Considero justo que una empresa use la ``calidad de redacción'' como
+    criterio automático para filtrar candidatos, aunque el puesto no requiera
+    escribir.
+\end{enumerate}
+
+\subsection*{Bloque IV. Experiencia directa}
+
+\begin{enumerate}[label=\textbf{L\arabic*.},resume]
+  \item He interactuado con sistemas automatizados que evalúan o filtran lo
+    que escribo (postulaciones en línea, chatbots de soporte, moderación en
+    redes sociales).
+  \item En esas interacciones, he sentido que el resultado habría sido
+    distinto si hubiera escrito de otra manera.
+  \item Confío en que las decisiones automatizadas sobre textos pueden
+    apelarse o revisarse por una persona si lo solicito.
+\end{enumerate}
+
+\section*{Sección 4. Preguntas abiertas}
+
+\noindent\textit{Responde con tus propias palabras; no hay respuestas
+correctas ni incorrectas. La extensión es libre.}
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item Cuéntanos alguna ocasión en la que sientas que a ti o a alguien
+    cercano lo trataron diferente (mejor o peor) por su forma de hablar o
+    escribir. ¿Qué pasó?
+  \item ¿Has cambiado alguna vez tu forma de escribir al llenar una solicitud,
+    postularte a un empleo o hablar con un chatbot o sistema automatizado?
+    ¿Qué cambiaste y por qué?
+  \item ¿Qué palabras, expresiones o formas de escribir crees que una empresa
+    o un sistema automatizado vería ``mal'' en un currículum? Da ejemplos si
+    puedes.
+  \item Si pudieras decirle algo a quienes diseñan estos sistemas
+    automatizados, ¿qué les dirías?
+\end{enumerate}
+
+\section*{Cierre}
+
+\begin{quote}
+Gracias por participar. Si conoces a otras personas de entre 18 y 30 años que
+puedan responder esta encuesta, te agradecemos compartirla
+[muestreo por bola de nieve].
+\end{quote}
+
+% -----------------------------------------------------------------------------
+% Mapa instrumento -> análisis (no se imprime en la versión aplicada;
+% conservar aquí como documentación metodológica para el Cap. 3):
+%
+%   D1-D7   -> caracterización de la muestra (Cap 4, tabla descriptiva)
+%   D6-D7   -> variable de cruce socioeconómico para los bloques Likert
+%   L1-L4   -> percepción de discriminación lingüística (humana)
+%   L5-L9   -> percepción de discriminación tecnológica  (algorítmica)
+%   L10-L12 -> exposición y confianza
+%   L5, L7  -> ítems invertidos (control de aquiescencia; recodificar)
+%   A1-A2   -> corpus: experiencias narradas (temas + sentimiento)
+%   A3      -> corpus: léxico estigmatizado percibido -> INSUMO DIRECTO para
+%              la tipología de variaciones del benchmark (Fase 3)
+%   A4      -> corpus: expectativas normativas (Cap 6, discusión)
+% -----------------------------------------------------------------------------

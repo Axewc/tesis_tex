@@ -1,0 +1,433 @@
+% =============================================================================
+%  Capítulo 5 -- Propuesta del Índice de Neutralidad Sociolectal
+% =============================================================================
+\chapter{Propuesta del Índice de Neutralidad Sociolectal}
+\label{cap:ins}
+
+\section{Definición conceptual del índice}
+\label{sec:ins-conceptual}
+
+El \emph{Índice de Neutralidad Sociolectal} (\INS) busca operacionalizar una
+intuición sencilla: un sistema de clasificación de texto es tanto más
+\emph{neutral} respecto a la variación sociolectal cuanto más consistente sea
+su comportamiento al ser confrontado con pares de textos que comparten
+contenido informativo pero difieren en registro lingüístico.
+
+El \INS no es una métrica de \emph{exactitud}, sino de \emph{consistencia
+intra-par}. Un modelo puede tener exactitud baja y, sin embargo, \INS alto si
+sus errores se distribuyen de manera independiente del registro; y un modelo
+puede tener exactitud alta y, no obstante, \INS bajo si su comportamiento
+correcto se concentra sistemáticamente en un registro y no en otro.
+
+\section{Formalización preliminar}
+\label{sec:ins-formal}
+
+\begin{definicion}[Par controlado]
+\label{def:par-controlado}
+Un \emph{par controlado} es un par ordenado $(t, t')$ de textos tales que su
+contenido informativo, evaluado bajo los criterios de la
+Sección~\ref{sec:benchmark-diseno}, es operativamente equivalente, y que
+difieren únicamente en su registro lingüístico.
+\end{definicion}
+
+Sea $\mathcal{B} = \{(t_i, t_i')\}_{i=1}^{N}$ un \emph{benchmark} de pares
+controlados y sea $f$ un clasificador. Se proponen dos formulaciones
+complementarias del \INS, según la información de salida disponible.
+
+\subsection{Formulación basada en decisiones}
+
+Cuando solo se dispone de la decisión $f(t) \in \mathcal{Y}$:
+
+\begin{definicion}[\INS de decisión]
+\label{def:ins-decision}
+\[
+  \mathrm{INS}_{\mathrm{dec}}(f, \mathcal{B}) \;=\;
+  \frac{1}{N} \sum_{i=1}^{N} \mathbb{1}\!\left[ f(t_i) = f(t_i') \right].
+\]
+\end{definicion}
+
+\noindent
+Esta formulación corresponde a la proporción de pares en los que el modelo
+emite la misma decisión para ambos miembros. Toma valores en $[0,1]$, con $1$
+indicando consistencia perfecta de decisión.
+
+\subsection{Formulación basada en probabilidades}
+
+Cuando se dispone de la distribución posterior $p_f(\cdot \mid t)$ sobre las
+clases:
+
+\begin{definicion}[\INS probabilístico]
+\label{def:ins-prob}
+\[
+  \mathrm{INS}_{\mathrm{prob}}(f, \mathcal{B}) \;=\;
+  1 \;-\; \frac{1}{N} \sum_{i=1}^{N}
+  d\!\left( p_f(\cdot \mid t_i),\; p_f(\cdot \mid t_i') \right),
+\]
+\noindent donde $d(\cdot,\cdot)$ es una medida de divergencia entre
+distribuciones (por ejemplo, divergencia de Jensen--Shannon o distancia de
+variación total), normalizada al intervalo $[0,1]$.
+\end{definicion}
+
+\noindent
+La formulación probabilística captura cambios en la confianza del modelo que
+la formulación de decisión ignora, y por tanto es preferible cuando se dispone
+de los puntajes de probabilidad.
+
+\subsection{Propiedades deseables}
+
+\begin{proposicion}[Acotación]
+$\mathrm{INS}_{\mathrm{dec}}(f, \mathcal{B}), \mathrm{INS}_{\mathrm{prob}}(f, \mathcal{B}) \in [0,1]$.
+\end{proposicion}
+
+\begin{proposicion}[Invariancia a permutaciones del \textit{benchmark}]
+El valor de ambas formulaciones es invariante a cualquier reordenamiento de
+los pares de $\mathcal{B}$.
+\end{proposicion}
+
+[Discutir y, según corresponda, demostrar otras propiedades: comportamiento
+ante \emph{benchmarks} desbalanceados por tipo de variación, robustez a
+ruido, etc.]
+
+\subsection{Variantes desagregadas}
+
+Si los pares de $\mathcal{B}$ están etiquetados por tipo de variación
+lingüística $v \in V$, se define el \INS condicional como
+
+\[
+  \mathrm{INS}_{\mathrm{dec}}(f, \mathcal{B} \mid v)
+  \;=\;
+  \frac{1}{|\mathcal{B}_v|}
+  \sum_{(t,t') \in \mathcal{B}_v}
+  \mathbb{1}\!\left[ f(t) = f(t') \right],
+\]
+\noindent donde $\mathcal{B}_v$ es el subconjunto de pares cuyo tipo de
+variación es $v$. Esta variante permite identificar qué tipos de variación
+afectan más al modelo.
+
+\section{Procedimiento de cálculo}
+\label{sec:ins-procedimiento}
+
+Esta sección operacionaliza las definiciones de la
+Sección~\ref{sec:ins-formal} en un procedimiento ejecutable y reproducible.
+Se describen las entradas requeridas, el algoritmo paso a paso, las
+decisiones de implementación y una implementación de referencia.
+
+\subsection{Entradas y supuestos}
+
+El cálculo del \INS requiere dos entradas. La primera es un \emph{benchmark}
+$\mathcal{B} = \{(t_i, t_i')\}_{i=1}^{N}$ de pares controlados
+(Definición~\ref{def:par-controlado}), donde cada par está opcionalmente
+etiquetado con su tipo de variación lingüística $v \in V$ para permitir la
+desagregación. La segunda es un clasificador $f$ que expone, como mínimo, una
+interfaz de decisión $f(t) \in \mathcal{Y}$ y, de manera opcional, la
+distribución de probabilidad posterior $p_f(\cdot \mid t)$ sobre las clases.
+
+El procedimiento presupone que las salidas del modelo son deterministas o han
+sido vueltas reproducibles. Para modelos con componentes estocásticos ---en
+particular, modelos de lenguaje grandes usados como clasificadores--- esto
+exige fijar la temperatura de muestreo en cero o, cuando ello no sea posible,
+promediar las salidas sobre $k$ ejecuciones independientes y documentar $k$.
+Sin esta precaución, la inconsistencia atribuible al azar del muestreo se
+confundiría con la inconsistencia sociolectal que el índice pretende medir.
+
+\subsection{Algoritmo}
+
+El cálculo procede en cinco pasos.
+
+\begin{enumerate}
+  \item \textbf{Verificación del \emph{benchmark}.} Se comprueba que
+    $\mathcal{B}$ no esté vacío, que cada par esté completo y que las
+    etiquetas de tipo de variación, si existen, pertenezcan al catálogo $V$
+    definido en la Sección~\ref{sec:benchmark-diseno}. Un \emph{benchmark}
+    vacío no produce un \INS de cero sino un valor \emph{indefinido}: el
+    procedimiento debe fallar explícitamente en ese caso, no devolver un
+    número que pueda malinterpretarse.
+  \item \textbf{Obtención de salidas.} Para cada par $(t_i, t_i')$ se
+    obtienen $f(t_i)$ y $f(t_i')$ y, si el modelo lo permite,
+    $p_f(\cdot \mid t_i)$ y $p_f(\cdot \mid t_i')$. Esto implica exactamente
+    $2N$ invocaciones al modelo; el costo del procedimiento es lineal en el
+    tamaño del \emph{benchmark}.
+  \item \textbf{Cálculo de la formulación de decisión.} Se computa
+    $\mathrm{INS}_{\mathrm{dec}}$ según la Definición~\ref{def:ins-decision}:
+    la proporción de pares con decisión coincidente.
+  \item \textbf{Cálculo de la formulación probabilística.} Si se dispone de
+    probabilidades, se computa $\mathrm{INS}_{\mathrm{prob}}$ según la
+    Definición~\ref{def:ins-prob}, con la divergencia de Jensen--Shannon como
+    medida $d$ (la elección se justifica más abajo).
+  \item \textbf{Desagregación y reporte.} Se calcula el \INS condicional por
+    tipo de variación, $\mathrm{INS}(f, \mathcal{B} \mid v)$, y se reporta el
+    índice global junto con el perfil desagregado, el tamaño $N$ del
+    \emph{benchmark}, el tamaño $N_v$ de cada celda y las métricas de
+    desempeño del modelo sobre la tarea. La razón de este último requisito se
+    desarrolla en la Sección~\ref{sec:ins-interpretacion}.
+\end{enumerate}
+
+\subsection{Decisiones de implementación}
+
+\paragraph{Elección y normalización de la divergencia.} La
+Definición~\ref{def:ins-prob} exige una divergencia $d$ acotada en $[0,1]$.
+Se adopta la divergencia de Jensen--Shannon calculada con logaritmo en base 2,
+que satisface esta cota de manera natural ---alcanza $0$ para distribuciones
+idénticas y $1$ para distribuciones con soportes disjuntos--- sin requerir
+normalización \emph{ad hoc}. Es además simétrica y está definida incluso
+cuando alguna clase recibe probabilidad cero, pues la mezcla
+$m = \tfrac{1}{2}(p + p')$ es estrictamente positiva dondequiera que alguna
+de las dos distribuciones lo sea.
+
+\paragraph{Degradación controlada.} Cuando el modelo no expone
+probabilidades ---caso frecuente en servicios de clasificación accedidos como
+caja negra--- el procedimiento se degrada a la formulación de decisión y el
+reporte lo hace explícito. Comparar un $\mathrm{INS}_{\mathrm{prob}}$ de un
+modelo con un $\mathrm{INS}_{\mathrm{dec}}$ de otro no es válido: son
+cantidades distintas.
+
+\paragraph{Separación entre evaluación y métrica.} La implementación separa
+la obtención de salidas del modelo (paso 2) del cálculo del índice (pasos
+3--5). Esta separación permite probar unitariamente las funciones de cálculo
+con casos sintéticos de respuesta conocida y recalcular el índice sin repetir
+las $2N$ invocaciones al modelo, que son la parte costosa del procedimiento.
+
+\subsection{Implementación de referencia}
+
+El Código~\ref{lst:ins-ref} presenta la implementación de referencia en
+Python, sin más dependencia que \texttt{NumPy}. Las funciones de cálculo
+fueron verificadas con pruebas unitarias que cubren los casos extremos:
+consistencia perfecta ($\INS = 1$), inversión total ($\INS = 0$), cotas de la
+divergencia y rechazo del \emph{benchmark} vacío.
+
+\begin{lstlisting}[caption={Implementación de referencia del cálculo del \INS.},label={lst:ins-ref}]
+import numpy as np
+
+def divergencia_js(p, q, base=2.0):
+    """Divergencia de Jensen-Shannon entre dos distribuciones
+    discretas. Con base 2, el resultado queda acotado en [0, 1]."""
+    p = np.asarray(p, dtype=float); q = np.asarray(q, dtype=float)
+    p = p / p.sum(); q = q / q.sum()
+    m = 0.5 * (p + q)
+    def kl(a, b):
+        mascara = a > 0   # m > 0 donde a > 0: el cociente es seguro
+        return float(np.sum(a[mascara]
+                     * (np.log(a[mascara] / b[mascara]) / np.log(base))))
+    return 0.5 * kl(p, m) + 0.5 * kl(q, m)
+
+def calcular_ins_dec(pares):
+    """INS de decision. `pares` es una lista de tuplas (y, y_prima)
+    con las decisiones del modelo para cada par controlado."""
+    if not pares:
+        raise ValueError("Benchmark vacio: el INS no esta definido.")
+    return sum(int(y == yp) for y, yp in pares) / len(pares)
+
+def calcular_ins_prob(pares, base=2.0):
+    """INS probabilistico. `pares` es una lista de tuplas (p, p_prima)
+    con las distribuciones posteriores del modelo para cada par."""
+    if not pares:
+        raise ValueError("Benchmark vacio: el INS no esta definido.")
+    total = sum(divergencia_js(p, q, base) for p, q in pares)
+    return 1.0 - total / len(pares)
+
+def ins_por_variacion(registros):
+    """INS de decision desagregado por tipo de variacion.
+    `registros` es un iterable de tuplas (tipo, y, y_prima)."""
+    grupos = {}
+    for tipo, y, yp in registros:
+        grupos.setdefault(tipo, []).append((y, yp))
+    return {t: calcular_ins_dec(ps) for t, ps in grupos.items()}
+\end{lstlisting}
+
+\subsection{Ejemplo ilustrativo}
+
+Para fijar ideas, considérese un \emph{benchmark} ficticio de cuatro pares
+sobre una tarea binaria con etiquetas \{apto, no apto\}, construido con fines
+puramente ilustrativos ---los valores no provienen de ningún experimento de
+esta tesis. La Tabla~\ref{tab:ejemplo-ins} muestra las decisiones de un
+modelo hipotético sobre cada miembro del par.
+
+\begin{table}[H]
+  \centering
+  \caption[Ejemplo ilustrativo del cálculo del \INS de decisión.]{Ejemplo
+  ilustrativo (datos ficticios) del cálculo de
+  $\mathrm{INS}_{\mathrm{dec}}$.}
+  \label{tab:ejemplo-ins}
+  \begin{tabular}{clll}
+    \toprule
+    \textbf{Par} & $f(t_i)$ & $f(t_i')$ & \textbf{¿Coincide?} \\
+    \midrule
+    1 & apto    & apto    & sí \\
+    2 & apto    & no apto & no \\
+    3 & no apto & no apto & sí \\
+    4 & apto    & apto    & sí \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Tres de los cuatro pares reciben la misma decisión, de modo que
+$\mathrm{INS}_{\mathrm{dec}} = 3/4 = 0.75$. El ejemplo permite además
+ilustrar qué añade la formulación probabilística: supóngase que en el par~1
+el modelo asigna a la clase ``apto'' una probabilidad de $0.91$ para $t_1$
+pero de $0.62$ para $t_1'$. La decisión no cambia ---ambas superan el umbral
+de $0.5$--- y el par cuenta como consistente para
+$\mathrm{INS}_{\mathrm{dec}}$; sin embargo, la divergencia de
+Jensen--Shannon entre $(0.91, 0.09)$ y $(0.62, 0.38)$ es de
+aproximadamente $0.089$, un desplazamiento de confianza que
+$\mathrm{INS}_{\mathrm{prob}}$ sí registra. En tareas donde la probabilidad
+alimenta decisiones posteriores ---ordenar candidatos en lugar de solo
+aceptarlos o rechazarlos--- ese desplazamiento tiene consecuencias aunque la
+etiqueta no cambie.
+
+\section{Aplicación a los resultados experimentales}
+\label{sec:ins-aplicacion}
+
+[Reporte de los valores de \INS calculados sobre los modelos del
+Capítulo~\ref{cap:resultados}, en sus formulaciones agregada y desagregada
+por tipo de variación, con su correspondiente interpretación.]
+
+\section{Interpretación y alcances del indicador}
+\label{sec:ins-interpretacion}
+
+Un indicador solo es útil si se conocen con precisión sus condiciones de
+lectura. Esta sección delimita qué afirma y qué no afirma un valor del \INS,
+bajo qué condiciones es comparable y cómo se sitúa frente a las métricas de
+equidad algorítmica existentes.
+
+\subsection{Qué mide y qué no mide el \INS}
+
+El \INS mide \emph{consistencia intra-par}: el grado en que un clasificador
+responde igual ante dos textos cuyo contenido es equivalente y cuyo registro
+difiere. Cuatro precisiones acotan esta lectura.
+
+Primera, consistencia no es corrección. Ambas dimensiones son ortogonales y
+su cruce genera cuatro escenarios cualitativamente distintos: un modelo
+exacto y consistente (el caso deseable); un modelo exacto en el agregado pero
+inconsistente entre registros, que es precisamente el sesgo que las métricas
+agregadas encubren; un modelo inexacto pero consistente, que falla por igual
+para todos los registros; y un modelo inexacto e inconsistente. El \INS
+distingue las columnas de este cruce, no las filas: por eso debe reportarse
+siempre junto a las métricas de desempeño de la tarea, nunca en su lugar.
+
+Segunda, y como caso límite de lo anterior: la neutralidad perfecta es
+trivialmente alcanzable. Un clasificador constante, que ignora por completo
+su entrada, obtiene $\mathrm{INS}_{\mathrm{dec}} = 1$ por construcción. Un
+\INS alto, aislado de toda métrica de desempeño, no acredita nada: el índice
+es informativo únicamente para modelos que resuelven la tarea con un
+desempeño no trivial.
+
+Tercera, el \INS es simétrico y, por tanto, no direccional: registra
+\emph{que} el modelo cambia su respuesta ante el registro, pero no
+\emph{a quién} favorece el cambio. Un mismo valor de \INS es compatible con
+un modelo que penaliza sistemáticamente el registro coloquial y con uno que
+lo favorece. Establecer la dirección del sesgo exige un análisis
+complementario ---por ejemplo, comparar la tasa de asignación de la clase
+favorable por condición de registro---, que en esta tesis se reporta en la
+Sección~\ref{sec:resultados-experimentos}.
+
+Cuarta, el \INS es una medida relativa al \emph{benchmark}, no una propiedad
+intrínseca del modelo. Su validez hereda la validez de la operacionalización
+de ``equivalencia de contenido'' descrita en la
+Sección~\ref{sec:benchmark-diseno}: si los pares confunden variación de
+registro con variación de contenido, el índice atribuirá al sesgo
+sociolectal inconsistencias que en realidad responden a información
+distinta. Todo valor de \INS debe leerse, en rigor, como
+``\INS del modelo $f$ \emph{sobre el benchmark} $\mathcal{B}$''.
+
+Finalmente, conviene precisar la relación entre las dos formulaciones. La
+probabilística es más sensible: detecta desplazamientos de confianza que no
+alcanzan a cruzar el umbral de decisión, como ilustró el ejemplo de la
+Sección~\ref{sec:ins-procedimiento}. La de decisión, en cambio, refleja la
+consecuencia material: lo que la persona evaluada experimenta es la decisión,
+no la distribución interna del modelo. Reportar ambas, cuando es posible,
+ofrece la lectura más completa: la probabilística como instrumento de
+diagnóstico fino, la de decisión como medida del efecto práctico.
+
+\subsection{Umbrales y comparabilidad}
+
+No existe un umbral universal a partir del cual un valor de \INS certifique
+neutralidad, y esta tesis deliberadamente no propone uno. Lo que sí pueden
+ofrecerse son puntos de referencia que delimitan el rango interpretable. En
+una tarea binaria, un clasificador que respondiera al azar de manera
+independiente sobre cada texto obtendría un
+$\mathrm{INS}_{\mathrm{dec}}$ esperado de $0.5$; el clasificador constante,
+como se señaló, alcanza $1$ de forma trivial. Los valores informativos de un
+modelo real se leen contra ese telón de fondo y, sobre todo, en
+\emph{comparación}: entre modelos evaluados sobre el mismo \emph{benchmark},
+entre versiones sucesivas de un mismo modelo, o entre tipos de variación
+dentro de un mismo modelo.
+
+De ahí se siguen las condiciones de comparabilidad. Dos valores de \INS son
+directamente comparables solo si provienen del mismo \emph{benchmark} ---los
+mismos pares, la misma tarea, el mismo espacio de etiquetas--- y de la misma
+formulación (decisión con decisión, probabilística con probabilística).
+Comparar valores obtenidos sobre \emph{benchmarks} distintos no es válido sin
+más: un conjunto de pares con variaciones sutiles producirá índices
+sistemáticamente más altos que uno con variaciones marcadas, sin que ello
+diga nada sobre los modelos.
+
+Por último, el perfil desagregado
+$\{\mathrm{INS}(f, \mathcal{B} \mid v)\}_{v \in V}$ es más informativo que el
+escalar global, pues localiza el problema: un modelo puede ser robusto ante
+anglicismos e inconsistente ante variación ortográfica, y esa estructura
+---invisible en el agregado--- es la que orienta tanto el diagnóstico como
+una eventual mitigación. El protocolo de reporte adoptado en esta tesis
+comprende, por ello, el \INS global en sus dos formulaciones cuando es
+posible, el perfil desagregado por tipo de variación con el tamaño $N_v$ de
+cada celda, y las métricas de desempeño del modelo sobre la tarea.
+
+\subsection{Relación con otras métricas de equidad}
+
+La literatura sobre equidad algorítmica ha producido una familia amplia de
+criterios formales, sistematizada en revisiones como la de Mehrabi y
+colaboradores \cite{Mehrabi2021Survey}. Situar el \INS en ese mapa ayuda a
+precisar su aporte.
+
+Las métricas de \emph{equidad de grupo} ---la paridad demográfica, que exige
+tasas de asignación de la clase favorable iguales entre grupos, o la igualdad
+de oportunidades, que exige tasas de verdaderos positivos iguales
+condicionadas a la etiqueta real--- comparan agregados calculados sobre
+individuos \emph{distintos} pertenecientes a grupos distintos
+\cite{Mehrabi2021Survey}. El \INS opera en otra unidad de análisis: compara
+las respuestas del modelo ante versiones del \emph{mismo} contenido, lo que
+lo aproxima a la familia de la \emph{equidad individual}, cuyo principio es
+que entradas similares reciban tratamientos similares. El \emph{benchmark} de
+pares controlados es, en efecto, una operacionalización textual de
+``similitud'': dos textos se declaran similares cuando su contenido es
+equivalente y solo difiere su registro.
+
+Esta construcción acerca el \INS, en particular, a la noción de
+\emph{equidad contrafáctica}, según la cual una decisión es justa si no
+cambiaría en el mundo contrafáctico donde el individuo perteneciera a otro
+grupo protegido [FUENTE: añadir la referencia primaria de equidad
+contrafáctica (Kusner et al., 2017, \emph{Counterfactual Fairness}, NeurIPS)
+a referencias.bib; mientras tanto, la noción está cubierta por el survey de
+Mehrabi]. Cada par $(t, t')$ del \emph{benchmark} funciona como un
+contrafáctico textual: el ``individuo'' es el contenido informativo y la
+intervención consiste en cambiar únicamente el atributo sensible, el
+registro. La diferencia importante es de estatus epistémico: la equidad
+contrafáctica plantea la intervención sobre un modelo causal del mundo,
+mientras que el \INS la realiza materialmente sobre el texto, que es donde el
+atributo sociolectal se manifiesta. Esa materialización es lo que vuelve al
+índice computable sin supuestos causales adicionales.
+
+El \INS comparte también una afinidad metodológica con las pruebas de
+invariancia usadas en la evaluación conductual de modelos de \PLN, en las que
+se verifica que perturbaciones que no alteran el significado no alteren la
+predicción [FUENTE: añadir la referencia de evaluación conductual por
+invariancia (Ribeiro et al., 2020, \emph{CheckList}, ACL) a
+referencias.bib]. Bajo esa lectura, el \INS es una prueba de invariancia cuya
+perturbación no es sintética ni arbitraria, sino sociolingüísticamente
+anclada: las variaciones provienen de los marcadores de registro
+documentados en el Capítulo~\ref{cap:marco} y derivados empíricamente de la
+encuesta.
+
+Dos ventajas prácticas se siguen de esta posición en el mapa. Primera, a
+diferencia de la igualdad de oportunidades, el \INS en su formulación de
+consistencia no requiere etiquetas de verdad de terreno: basta el
+\emph{benchmark} y el acceso al modelo, lo que lo hace aplicable a sistemas
+de caja negra cuya tarea ni siquiera tiene una etiqueta ``correcta''
+verificable. Segunda, su unidad de análisis pareada lo protege de un modo de
+fallo conocido de las métricas de grupo: un sistema puede satisfacer la
+paridad demográfica compensando errores entre subpoblaciones sin tratar de
+manera consistente a ningún individuo en particular. Nada de esto convierte
+al \INS en sustituto de aquellas métricas: mide una dimensión ---la
+consistencia ante variación sociolectal--- que las métricas de grupo no
+capturan, y omite otras ---las tasas de acierto condicionadas a la verdad de
+terreno--- que ellas sí. Su lugar es el de un complemento dentro de una
+batería de evaluación, no el de una medida única de equidad.

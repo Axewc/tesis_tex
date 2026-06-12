@@ -1,0 +1,382 @@
+% =============================================================================
+%  Capítulo 2 -- Marco teórico
+%  -------------------------------------------------------------------------
+%  NOTA PARA AXEL:
+%  - Este capítulo está redactado con contenido real, pero deliberadamente
+%    sintético: cada sección es un primer borrador sólido que debes expandir
+%    con detalle de las fuentes primarias.
+%  - Las marcas «[VERIFICAR: ...]» señalan afirmaciones cuya formulación
+%    exacta conviene cotejar contra el artículo citado antes de la entrega.
+%  - Las marcas «[FUENTE MX: ...]» señalan dónde DEBES añadir bibliografía
+%    mexicana específica (esto cubre tu objetivo específico O1). No inventé
+%    referencias para México: no existen aún en referencias.bib.
+% =============================================================================
+\chapter{Marco teórico}
+\label{cap:marco}
+
+Este capítulo construye el andamiaje conceptual de la tesis articulando cuatro
+cuerpos de literatura que rara vez se leen en conjunto. La
+Sección~\ref{sec:sesgo-algoritmico} sitúa la noción de sesgo en sistemas de
+inteligencia artificial y precisa el sentido en que se usará a lo largo del
+trabajo. La Sección~\ref{sec:pln} introduce los elementos técnicos de la
+clasificación automática de texto necesarios para interpretar los experimentos
+posteriores. La Sección~\ref{sec:sociolectos} recupera, desde la
+sociolingüística, los conceptos de variación sociolectal y discriminación
+lingüística. Finalmente, la Sección~\ref{sec:clasismo} aterriza estas
+discusiones en el contexto mexicano, que es el escenario empírico de la
+investigación.
+
+\section{Sesgo algorítmico en sistemas de inteligencia artificial}
+\label{sec:sesgo-algoritmico}
+
+\subsection{Tres sentidos de ``sesgo''}
+\label{sec:tres-sentidos}
+
+El término \emph{sesgo} es notoriamente polisémico, y buena parte de la
+confusión en los debates públicos sobre inteligencia artificial proviene de no
+distinguir sus acepciones. Conviene separar al menos tres.
+
+En primer lugar, el \emph{sesgo estadístico} designa la diferencia sistemática
+entre el valor esperado de un estimador y el parámetro que pretende estimar. Es
+una noción técnica, neutra desde el punto de vista moral, y constitutiva de
+todo aprendizaje: el llamado \emph{compromiso sesgo--varianza} muestra que
+cierto sesgo es incluso deseable para controlar la varianza de un modelo. En
+segundo lugar, el \emph{sesgo cognitivo} se refiere a las desviaciones
+sistemáticas del juicio humano respecto de la racionalidad normativa, estudiadas
+por la psicología. En tercer lugar, el \emph{sesgo social} o
+\emph{discriminatorio} designa el trato sistemáticamente desigual de grupos
+sociales por parte de un sistema, en formas que reproducen o amplifican
+desigualdades preexistentes \cite{Mehrabi2021Survey}.
+
+Esta tesis se ocupa exclusivamente del tercer sentido, cuya relevancia para el
+\PLN fue señalada tempranamente por Hovy y Spruit \cite{HovySpruit2016} al
+argumentar que las tecnologías del lenguaje tienen un impacto social propio
+---sobre la exclusión, la sobregeneralización y la exposición de grupos---
+que la comunidad técnica había tendido a ignorar. La distinción entre los tres
+sentidos no es ociosa: un sistema puede estar estadísticamente bien calibrado
+y, sin embargo, ser socialmente sesgado, porque los datos sobre los que aprende
+ya codifican desigualdades del mundo. La cuestión, por tanto, no es meramente técnica sino
+\emph{sociotécnica}: requiere examinar conjuntamente el comportamiento del
+modelo y el contexto social en el que se inserta.
+
+\subsection{Definición operativa}
+\label{sec:definicion-sesgo}
+
+Para que el problema sea evaluable empíricamente se adopta la siguiente
+caracterización operativa.
+
+\begin{definicion}[Sesgo social en un sistema de clasificación]
+\label{def:sesgo}
+Sea $f : \mathcal{X} \to \mathcal{Y}$ un clasificador y sea $A$ un atributo
+protegido o socialmente sensible definido sobre la población de entradas. Se
+dice que $f$ exhibe \emph{sesgo social} respecto a $A$ si existen valores
+$a, a' \in A$ y una métrica de comportamiento $\mu$ tales que
+\[
+  \mu\bigl(f \mid A = a\bigr) \;\neq\; \mu\bigl(f \mid A = a'\bigr),
+\]
+y dicha diferencia no se justifica por una variación correspondiente en la
+variable objetivo $\mathcal{Y}$ atribuible legítimamente a $A$.
+\end{definicion}
+
+La cláusula final ---``no se justifica por una variación legítima''--- es la que
+carga con todo el peso normativo y, a la vez, la más difícil de operacionalizar.
+En el caso de esta tesis, el atributo $A$ es el \emph{registro lingüístico} de
+un texto, y la justificación se vuelve especialmente tenue: si dos textos
+comunican el mismo contenido sustantivo y difieren solo en su estilo, no existe
+ninguna variación legítima en $\mathcal{Y}$ que pueda explicar un trato
+diferenciado. Es precisamente este caso límite el que el \emph{Índice de
+Neutralidad Sociolectal} (\INS), definido en el Capítulo~\ref{cap:ins}, busca
+capturar.
+
+\subsection{Fuentes de sesgo en sistemas de procesamiento de lenguaje natural}
+\label{sec:fuentes-sesgo}
+
+Hovy y Prabhumoye \cite{HovyPrabhumoye2021} ofrecen una taxonomía influyente que
+identifica cinco puntos del ciclo de vida de un sistema de \PLN en los que puede
+introducirse sesgo social. Conviene revisarlos porque ofrecen un mapa de dónde
+podría originarse el sesgo sociolectal que la tesis investiga.
+
+\subsubsection{Sesgo en los datos}
+
+Los modelos de \PLN aprenden de corpus que son muestras del lenguaje producido
+en condiciones sociales concretas, no espejos neutrales de la lengua. El sesgo
+de los datos surge cuando ciertos grupos, registros o variedades están
+sobre- o subrepresentados, o cuando el texto disponible refleja desigualdades
+históricas. A medida que los corpus de entrenamiento crecen hasta volúmenes que
+ningún equipo puede auditar exhaustivamente, este problema se agrava: Bender
+y colaboradores \cite{Bender2021Parrots} advierten que el tamaño no garantiza
+diversidad y que los corpus masivos tienden a sobrerrepresentar las variedades
+hegemónicas y los puntos de vista dominantes. [VERIFICAR: matiz exacto del
+argumento sobre tamaño vs.\ diversidad.]
+
+\subsubsection{Sesgo en las anotaciones}
+
+Gran parte de los sistemas de clasificación se entrena con etiquetas asignadas
+por anotadores humanos, cuyas intuiciones no son neutrales. La composición
+demográfica del panel de anotación, las guías de etiquetado y los juicios
+implícitos sobre qué cuenta como ``correcto'' o ``ofensivo'' se transfieren al
+modelo. Un ejemplo documentado y directamente pertinente para esta tesis es el
+de Sap y colaboradores \cite{Sap2019Risk}, quienes mostraron que los anotadores
+tendían a clasificar como ofensivo el inglés afroamericano vernáculo con mayor
+frecuencia que el inglés estándar, sesgo que los clasificadores entrenados sobre
+esas anotaciones aprendían y reproducían. El caso ilustra el mecanismo central
+del presente trabajo: una variedad lingüística asociada a un grupo social
+recibe un trato sistemáticamente distinto que no responde al contenido del
+mensaje.
+
+\subsubsection{Sesgo en las representaciones lingüísticas}
+
+Antes de ser clasificado, el texto se transforma en representaciones numéricas.
+Estas representaciones no son inertes: codifican regularidades estadísticas del
+corpus, incluidas las asociaciones estereotipadas. Caliskan y colaboradores
+\cite{Caliskan2017Semantics} demostraron que los \emph{embeddings} de palabras
+entrenados sobre texto de la web reproducen sesgos humanos medibles, análogos a
+los que captan las pruebas de asociación implícita en psicología. Bolukbasi y
+colaboradores \cite{Bolukbasi2016Man} ilustraron el fenómeno con analogías de
+género estereotipadas y propusieron técnicas tempranas de mitigación. Estos
+trabajos establecen que el sesgo puede residir en la capa de representación,
+con independencia del clasificador final.
+
+\subsubsection{Sesgo en el diseño del modelo}
+
+La arquitectura, la función objetivo y los hiperparámetros de un modelo también
+introducen sesgo, en particular porque los modelos tienden a \emph{amplificar}
+las regularidades del entrenamiento más que a reproducirlas fielmente. Un
+patrón presente en una minoría de los datos puede volverse la respuesta por
+defecto del modelo si reduce la pérdida agregada. Para esta tesis, la
+implicación es metodológica: el sesgo sociolectal observado en un clasificador
+no puede atribuirse sin más a sus datos de entrenamiento, pues la magnitud del
+efecto depende también de la familia de modelo; de ahí que el diseño
+experimental del Capítulo~\ref{cap:metodologia} contemple modelos de
+complejidad creciente.
+
+\subsubsection{Sesgo en el diseño de la investigación}
+
+La fuente más sutil es la elección misma de qué problemas se estudian, sobre qué
+lenguas y para qué poblaciones. La concentración del \PLN en el inglés y en
+contextos del Norte global determina qué fenómenos se vuelven visibles y cuáles
+permanecen sin estudiar. Esta tesis es, en parte, una respuesta a ese sesgo de
+agenda: investiga la variación sociolectal del español mexicano, un objeto
+sistemáticamente ausente de los \emph{benchmarks} de equidad disponibles.
+
+\subsection{Del sesgo a la equidad: una nota crítica}
+\label{sec:critica-bias}
+
+Blodgett y colaboradores \cite{Blodgett2020Survey} señalan que buena parte de la
+literatura sobre ``sesgo'' en \PLN adolece de imprecisión conceptual: se invoca
+el término sin especificar qué comportamiento es perjudicial, para quién y por
+qué. Recomiendan anclar todo estudio de sesgo en un daño concreto y en su
+relación con las desigualdades sociales que lo motivan. Esta tesis adopta esa
+recomendación: el daño concreto es el trato diferenciado de hablantes según su
+registro en procesos de consecuencias materiales ---como el filtrado de
+currículums--- y la desigualdad de fondo es el clasismo lingüístico discutido
+en la Sección~\ref{sec:clasismo}.
+
+\section{Procesamiento de lenguaje natural y clasificación automática de texto}
+\label{sec:pln}
+
+\subsection{La tarea de clasificación de texto}
+\label{sec:tarea-clasificacion}
+
+La clasificación de texto es la tarea de asignar a un documento $x \in
+\mathcal{X}$ una etiqueta $y \in \mathcal{Y}$ de un conjunto finito y
+predefinido. Formalmente, se busca aprender una función $f : \mathcal{X} \to
+\mathcal{Y}$ a partir de un conjunto de ejemplos etiquetados. La canalización
+(\emph{pipeline}) típica comprende cuatro etapas: (i)~\emph{preprocesamiento}
+del texto crudo; (ii)~\emph{representación} del documento como un vector o una
+secuencia de vectores; (iii)~\emph{modelado}, donde un algoritmo de aprendizaje
+estima una función de decisión; y (iv)~\emph{decisión}, donde se emite la
+etiqueta y, opcionalmente, una distribución de probabilidad sobre las clases.
+El \INS, definido más adelante, opera sobre las salidas de las etapas (iii) y
+(iv): la decisión y la probabilidad posterior.
+
+\subsection{Representaciones del texto}
+\label{sec:representaciones}
+
+La forma de representar el texto determina qué información queda disponible para
+el clasificador. Tres familias resultan relevantes para esta tesis.
+
+Las representaciones \emph{de bolsa de palabras} y su ponderación
+\emph{TF--IDF} describen un documento por las frecuencias de los términos que
+contiene, ignorando el orden. Son interpretables y computacionalmente baratas,
+pero ciegas al contexto: dos textos con el mismo contenido y distinto registro
+pueden recibir representaciones muy distintas solo por su léxico, lo que las
+hace un punto de partida útil para estudiar el sesgo sociolectal.
+
+Los \emph{embeddings} estáticos asignan a cada palabra un vector fijo aprendido
+de grandes corpus, de modo que palabras de uso similar quedan próximas en el
+espacio vectorial. Como se discutió en la Sección~\ref{sec:fuentes-sesgo}, estos
+vectores codifican asociaciones sociales del corpus de origen.
+
+Los \emph{embeddings} contextuales, popularizados por arquitecturas de tipo
+\emph{transformer} como BERT \cite{Devlin2019BERT}, asignan a cada aparición de
+una palabra un vector que depende de su contexto, lo que mejora notablemente el
+desempeño en la mayoría de las tareas. Para el español existen modelos
+preentrenados específicos, como BETO \cite{CanetePilar2020BETO}, que serán
+candidatos naturales para la evaluación experimental del
+Capítulo~\ref{cap:resultados}.
+
+\subsection{Familias de modelos relevantes}
+\label{sec:familias-modelos}
+
+Para los fines de la tesis conviene distinguir tres familias de clasificadores,
+con grados crecientes de complejidad y opacidad. Los \emph{modelos lineales}
+(regresión logística, máquinas de vectores de soporte) sobre representaciones
+TF--IDF ofrecen interpretabilidad y un comportamiento predecible. Los
+\emph{modelos basados en \emph{transformers} preentrenados} y ajustados a la
+tarea, como BETO \cite{CanetePilar2020BETO}, alcanzan mayor desempeño a costa de
+transparencia. Por último, los \emph{modelos de lenguaje grandes} empleados como
+clasificadores en modo \emph{zero-shot} o \emph{few-shot} permiten clasificar sin
+entrenamiento específico, pero su comportamiento ante variaciones de registro
+es poco estudiado y especialmente difícil de auditar \cite{Bender2021Parrots}.
+La inclusión de al menos un representante de cada familia permitirá observar si
+el sesgo sociolectal varía con la complejidad del modelo.
+
+\subsection{Métricas estándar de evaluación y sus límites}
+\label{sec:metricas}
+
+El desempeño de un clasificador suele resumirse con la exactitud, la precisión,
+la exhaustividad (\emph{recall}) y su media armónica, la medida F1, además de
+métricas de calibración cuando interesan las probabilidades. Estas métricas son
+\emph{agregadas}: describen el comportamiento promedio sobre un conjunto de
+prueba. Su limitación, central para esta tesis, es que un modelo puede exhibir
+una F1 alta y, simultáneamente, comportarse de manera sistemáticamente distinta
+ante subgrupos o registros, porque los errores se compensan en el agregado
+\cite{Blodgett2020Survey, Mehrabi2021Survey}. De ahí la necesidad de métricas
+\emph{desagregadas} y de indicadores específicos de consistencia como el \INS,
+que no miden cuánto acierta el sistema sino cuán establemente se comporta ante
+variaciones que no deberían importar.
+
+\section{Discriminación lingüística y sociolectos}
+\label{sec:sociolectos}
+
+\subsection{Variación sociolectal: conceptos básicos}
+\label{sec:variacion}
+
+La sociolingüística ha documentado de manera consistente que el lenguaje varía
+de forma sistemática según factores sociales. Conviene precisar tres términos
+que se usarán con cuidado en lo que sigue. Un \emph{dialecto} es una variedad
+asociada principalmente a un grupo geográfico. Un \emph{sociolecto} es una
+variedad asociada a un grupo social ---definido por clase, nivel educativo,
+ocupación u otros factores estructurales. Un \emph{registro} es la variación que
+un mismo hablante despliega según la situación comunicativa, desde lo más formal
+a lo más coloquial. Estas dimensiones se entrecruzan: un rasgo puede ser a la
+vez marcador sociolectal y de registro.
+
+Lo crucial para esta tesis es que la variación sociolectal es, en lo esencial,
+variación de \emph{forma} y no de \emph{contenido}: dos hablantes de
+sociolectos distintos pueden comunicar exactamente la misma información. Cuando
+un sistema responde de manera diferente a ambos, la diferencia no puede
+atribuirse al mensaje, sino al cómo se dice ---es decir, a un marcador social.
+
+\subsection{La discriminación lingüística como fenómeno social}
+\label{sec:discriminacion-ling}
+
+La \emph{discriminación lingüística} ocurre cuando determinados registros,
+dialectos o sociolectos se asocian con juicios negativos sobre la capacidad, la
+inteligencia o la credibilidad de quien los emplea, de modo que la forma del
+habla se convierte en vía para reproducir jerarquías sociales preexistentes
+\cite{Weissler2022}. Drożdżowicz \cite{Drozdzowicz2024} subraya que el fenómeno
+es más complejo de lo que sugiere su nombre, pues entrelaza juicios estéticos,
+epistémicos y morales que resultan difíciles de separar analíticamente.
+[VERIFICAR: caracterización precisa de la tesis de Drożdżowicz; cotejar contra
+el artículo antes de la entrega.] Lo que importa retener es que la
+discriminación lingüística no es una reacción a deficiencias comunicativas
+reales ---el mensaje se entiende perfectamente--- sino una sanción social
+adherida a marcadores de grupo.
+
+[FUENTE MX: aquí conviene introducir el concepto de \emph{ideología de la
+lengua estándar} y vincularlo con la tradición sociolingüística clásica sobre
+prestigio y estigma. Añade referencias canónicas de sociolingüística variacionista
+y, si es posible, trabajos sobre el español.]
+
+\subsection{Del juicio humano al sesgo algorítmico}
+\label{sec:puente}
+
+El argumento que articula esta tesis puede enunciarse como un puente en tres
+pasos. Primero, existe una discriminación lingüística humana documentada que
+sanciona ciertos sociolectos (Sección~\ref{sec:discriminacion-ling}). Segundo,
+los sistemas de \PLN aprenden de texto producido y anotado por humanos, de modo
+que pueden internalizar esas sanciones (Sección~\ref{sec:fuentes-sesgo}).
+Tercero, existe evidencia empírica de que esto efectivamente ocurre: el ya
+mencionado estudio de Sap y colaboradores \cite{Sap2019Risk} muestra un caso en
+el que una variedad lingüística asociada a un grupo social recibe un trato
+algorítmico sistemáticamente desfavorable. La hipótesis de trabajo de la tesis
+es que un mecanismo análogo podría operar para los sociolectos del español
+mexicano, hipótesis que el diseño experimental de los
+Capítulos~\ref{cap:metodologia} y~\ref{cap:resultados} pone a prueba de forma
+controlada.
+
+\section{Clasismo estructural y lenguaje en el contexto mexicano}
+\label{sec:clasismo}
+
+\subsection{Clasismo estructural en México}
+\label{sec:clasismo-mx}
+
+El clasismo no se reduce a actitudes individuales de desprecio: es
+\emph{estructural} en la medida en que se inscribe en instituciones, prácticas y
+representaciones que distribuyen de manera desigual el reconocimiento y las
+oportunidades según la posición social percibida. En el caso mexicano, el
+clasismo se entrecruza además con marcadores raciales y geográficos, de modo que
+clase, color de piel y origen tienden a leerse conjuntamente.
+
+[FUENTE MX: desarrolla esta subsección con literatura mexicana específica
+---estudios sobre discriminación (p.\ ej., informes de instituciones nacionales
+dedicadas a prevenir la discriminación), trabajos sociológicos y antropológicos
+sobre clasismo y colorismo. Esta subsección es el núcleo de tu objetivo
+específico O1 y requiere fuentes que aún no están en referencias.bib. No incluí
+citas aquí para no inventarlas.]
+
+\subsection{Marcadores sociolingüísticos del clasismo en el español mexicano}
+\label{sec:marcadores-mx}
+
+En el español mexicano, ciertos rasgos lingüísticos funcionan como índices de
+clase y son objeto de juicio social. Entre ellos suelen señalarse el contraste
+entre léxico formal y coloquial, el uso de anglicismos como marca de cierto
+capital cultural, fenómenos de pronunciación, marcadores discursivos
+característicos y, en el registro escrito informal, la variación ortográfica.
+Los términos \emph{naco} y \emph{fresa}, ampliamente usados en el habla
+cotidiana, condensan precisamente la asociación entre formas de hablar (y de
+presentarse) y posición social percibida, operando como etiquetas
+estigmatizantes y de prestigio respectivamente.
+
+Para los fines de esta tesis, la importancia de estos marcadores es metodológica:
+constituyen las dimensiones de variación que el \emph{benchmark} controlado del
+Capítulo~\ref{cap:metodologia} deberá operacionalizar, manteniendo constante el
+contenido informativo. La selección final de los marcadores se justificará
+empíricamente a partir de la encuesta de percepciones.
+
+[FUENTE MX: respalda la caracterización de estos marcadores con trabajos
+lingüísticos sobre el español de México; evita apoyarte solo en el conocimiento
+común.]
+
+\subsection{Implicaciones para sistemas automatizados desplegados en México}
+\label{sec:implicaciones-mx}
+
+Si los marcadores anteriores estructuran el juicio social humano y los sistemas
+de \PLN aprenden de texto humano, cabe esperar que un clasificador entrenado
+o ajustado con datos del español mexicano herede, al menos en parte, esas
+asociaciones. El riesgo es concreto: en procesos como el filtrado automatizado
+de currículums, una respuesta sistemáticamente distinta del modelo ante el
+mismo contenido expresado en un registro estigmatizado se traduciría en
+desventajas materiales para personas cuyo estilo de escritura se aparta del
+registro dominante. Documentar y medir ese riesgo es el propósito de los
+capítulos siguientes.
+
+\section*{Síntesis del capítulo}
+\addcontentsline{toc}{section}{Síntesis del capítulo}
+
+El recorrido de este capítulo puede condensarse en cuatro proposiciones que
+sostienen el resto de la tesis. Primera: el sesgo que interesa aquí es el
+social, no el estadístico, y se vuelve evaluable cuando se fija un atributo
+sensible y una métrica de comportamiento (Definición~\ref{def:sesgo}). Segunda:
+ese sesgo puede entrar a un sistema de \PLN por cinco vías documentadas
+---datos, anotaciones, representaciones, modelo y agenda de investigación---,
+todas plausibles para el caso sociolectal. Tercera: la variación sociolectal es
+variación de forma y no de contenido, de modo que un trato algorítmico
+diferenciado ante ella no admite justificación informativa. Cuarta: en el
+contexto mexicano existen marcadores lingüísticos de clase socialmente
+sancionados, lo que hace verosímil ---aunque no demostrado--- que los sistemas
+desplegados en ese contexto los hereden. Establecer si esto ocurre, y con qué
+magnitud, es una pregunta empírica; el siguiente capítulo describe el diseño
+con el que se aborda.

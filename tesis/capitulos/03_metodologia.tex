@@ -1,0 +1,340 @@
+% =============================================================================
+%  Capítulo 3 -- Metodología
+% =============================================================================
+\chapter{Metodología}
+\label{cap:metodologia}
+
+\section{Diseño general de la investigación}
+\label{sec:diseno-general}
+
+La investigación adopta una metodología de \emph{evaluación sociotécnica} que
+combina tres componentes complementarios: (i) un análisis documental, (ii) la
+recolección de percepciones sociales mediante encuesta y (iii) un experimento
+computacional controlado. El supuesto que articula los tres componentes es
+que la evaluación de sistemas algorítmicos desplegados en contextos sociales
+concretos no puede limitarse a métricas técnicas abstractas, sino que requiere
+contrastar el comportamiento del sistema con el fenómeno social que podría
+estar replicando.
+
+\begin{figure}[H]
+  \centering
+  % Reemplaza este placeholder con un diagrama del flujo metodológico.
+  \fbox{\parbox{0.9\textwidth}{\centering\vspace{1cm}
+    \textit{[Diagrama del flujo metodológico:}\\
+    \textit{revisión documental} $\longrightarrow$ \textit{encuesta de
+    percepciones} $\longrightarrow$ \textit{diseño del benchmark} $\longrightarrow$
+    \textit{experimentos} $\longrightarrow$ \textit{cálculo del \INS\textit{]}}
+    \vspace{1cm}}}
+  \caption[Esquema general de la metodología sociotécnica.]{Esquema general
+  de la metodología sociotécnica empleada.}
+  \label{fig:flujo-metodologico}
+\end{figure}
+
+\section{Revisión documental}
+\label{sec:revision-documental}
+
+\subsection{Criterios de inclusión y exclusión}
+
+[Bases bibliográficas consultadas; años; idiomas; tipos de documento;
+criterios para incluir y excluir referencias.]
+
+\subsection{Estrategia de búsqueda}
+
+[Cadenas de búsqueda, palabras clave en español e inglés, número de resultados
+recuperados, filtrado y selección final.]
+
+\subsection{Síntesis temática}
+
+[Descripción del procedimiento para sintetizar la literatura encontrada en
+los ejes temáticos del Capítulo~\ref{cap:marco}.]
+
+\section{Recolección de percepciones sobre discriminación tecnológica}
+\label{sec:encuesta}
+
+El segundo componente de la metodología consistió en una encuesta dirigida a
+personas jóvenes residentes en México, orientada a recoger percepciones y
+experiencias sobre el trato diferenciado ---humano y automatizado--- asociado
+a la forma de hablar o escribir. La encuesta cumple un doble propósito dentro
+del diseño sociotécnico. Por una parte, aporta evidencia situada sobre cómo se
+experimenta la discriminación lingüística en el contexto mexicano,
+complementando la revisión documental del objetivo~O1. Por otra, sus
+respuestas abiertas constituyen el insumo empírico del que se deriva la
+tipología de variaciones lingüísticas que estructura el \emph{benchmark}
+(Sección~\ref{sec:benchmark-diseno}): en lugar de postular desde el escritorio
+qué rasgos del registro escrito son objeto de juicio social, la tipología se
+ancla en los rasgos que los propios participantes reportan como sancionados.
+
+\subsection{Población y muestreo}
+\label{sec:poblacion-muestreo}
+
+La población objetivo se definió como personas de 18 a 30 años residentes en
+México [DECIDIR: confirmar rango de edad con el asesor]. La elección de este
+rango respondió a dos criterios. Primero, se trata del grupo con mayor
+exposición a procesos automatizados de evaluación de texto ---postulaciones de
+empleo y becas en línea, plataformas digitales, sistemas de atención
+automatizada---, por lo que sus percepciones refieren a experiencias recientes
+y no hipotéticas. Segundo, restringir la población a personas mayores de edad
+evita el tratamiento de datos de menores y los requisitos de consentimiento
+parental asociados.
+
+El muestreo fue no probabilístico, por conveniencia y con propagación por bola
+de nieve: el cuestionario se difundió a través de los contactos del
+investigador y se pidió a cada participante compartirlo con otras personas del
+rango de edad. Para mitigar el sesgo de red ---la tendencia de este tipo de
+muestreo a concentrarse en el círculo inmediato del investigador, en este caso
+universitario---, la difusión inicial se dirigió deliberadamente a contactos
+de distintos niveles educativos y contextos socioeconómicos
+[PENDIENTE: describir brevemente los canales de difusión efectivamente
+utilizados].
+
+Esta estrategia de muestreo impone una limitación que conviene dejar asentada
+desde ahora: la muestra resultante no es representativa de la población joven
+mexicana, por lo que los resultados cuantitativos de la encuesta no admiten
+inferencia poblacional. Su función en esta investigación es de carácter
+exploratorio e instrumental ---identificar dimensiones relevantes del fenómeno
+y alimentar el diseño del \emph{benchmark}---, no estimar prevalencias. Esta
+limitación se retoma en la Sección~\ref{sec:limitaciones}.
+[PENDIENTE: reportar el tamaño muestral final alcanzado, $n = \ldots$, y el
+periodo de levantamiento.]
+
+\subsection{Instrumento}
+\label{sec:instrumento}
+
+El instrumento fue un cuestionario en línea, autoadministrado y anónimo, con
+una duración estimada de respuesta de 10 a 12 minutos, estructurado en cuatro
+secciones: consentimiento informado, datos sociodemográficos, percepciones en
+escala tipo Likert y preguntas abiertas. El instrumento completo se reproduce
+en el Apéndice~\ref{ap:encuesta}; aquí se describen sus decisiones de diseño.
+
+La sección sociodemográfica (ítems D1--D7) recoge edad, entidad de residencia,
+tipo de localidad, nivel educativo propio y situación de actividad. Para
+aproximar el nivel socioeconómico de origen se emplearon dos variables
+sustitutas (\emph{proxies}): la escolaridad máxima de la madre o tutor
+principal (D6) y una autoevaluación retrospectiva de la suficiencia económica
+del hogar de crianza (D7). Se optó por estas aproximaciones, de uso común en
+encuestas sociales, por ser menos invasivas y menos propensas a la no
+respuesta que la pregunta directa por ingreso
+[DECIDIR: si el asesor prefiere un instrumento estandarizado, sustituir por la
+regla AMAI y ajustar esta justificación].
+
+La sección de percepciones consta de doce ítems (L1--L12) con escala Likert de
+cinco puntos, etiquetada en todos sus niveles (de ``totalmente en desacuerdo''
+a ``totalmente de acuerdo''), organizados en cuatro bloques: discriminación
+lingüística en general (L1--L4), tecnología y trato diferenciado (L5--L6),
+escenarios (L7--L9) y experiencia directa (L10--L12). Tres decisiones de
+diseño merecen justificación explícita.
+
+Primera, dos ítems (L5 y L7) se redactaron en sentido inverso al resto, de
+modo que el acuerdo con ellos expresa la posición contraria a la del bloque.
+Su propósito es controlar el sesgo de aquiescencia ---la tendencia a responder
+de acuerdo con independencia del contenido--- y detectar patrones de respuesta
+automática; ambos se recodifican antes del análisis.
+
+Segunda, el bloque de escenarios sustituye preguntas directas por
+mini-viñetas: situaciones concretas (por ejemplo, dos currículums con la misma
+experiencia y distinto estilo ante un filtro automatizado) sobre las que el
+participante toma postura. Las viñetas reducen la deseabilidad social
+---resulta menos costoso emitir un juicio sobre una situación de terceros que
+admitir una actitud propia--- y acercan el objeto de la pregunta al escenario
+de uso que motiva esta tesis.
+
+Tercera, las cuatro preguntas abiertas (A1--A4) se ordenaron de lo concreto a
+lo abstracto: una experiencia vivida de trato diferenciado (A1), las
+adaptaciones del propio estilo de escritura ante sistemas automatizados (A2),
+el léxico y las formas de escribir que el participante percibe como
+penalizadas por una empresa o sistema (A3) y, por último, un mensaje libre a
+quienes diseñan estos sistemas (A4). El orden busca anclar primero la memoria
+episódica del participante antes de pedirle generalizaciones. El ítem A3
+cumple además una función estructural en el diseño: sus respuestas alimentan
+directamente la tipología de variaciones del \emph{benchmark}.
+
+Previo al levantamiento, el instrumento se sometió a una prueba piloto con
+entre cinco y ocho personas del rango de edad objetivo, con el fin de medir el
+tiempo real de respuesta y detectar ítems ambiguos
+[PENDIENTE: reportar resultados del piloto y ajustes derivados].
+
+La Tabla~\ref{tab:instrumento-analisis} resume la correspondencia entre las
+secciones del instrumento y su uso analítico.
+
+\begin{table}[H]
+  \centering
+  \caption[Correspondencia entre instrumento y plan de análisis.]{Correspondencia
+  entre las secciones del instrumento y su uso en el análisis.}
+  \label{tab:instrumento-analisis}
+  \begin{tabular}{llp{6.2cm}}
+    \toprule
+    \textbf{Ítems} & \textbf{Constructo} & \textbf{Uso analítico} \\
+    \midrule
+    D1--D7   & Perfil sociodemográfico & Caracterización de la muestra \\
+    D6--D7   & Nivel socioeconómico (proxy) & Variable de cruce para los bloques Likert \\
+    L1--L4   & Discriminación lingüística percibida & Descriptivos y comparación por grupos \\
+    L5--L9   & Discriminación tecnológica percibida & Descriptivos y comparación por grupos \\
+    L10--L12 & Exposición y confianza & Descriptivos; contexto interpretativo \\
+    A1--A2   & Experiencias narradas & Corpus: temas y sentimiento \\
+    A3       & Léxico percibido como penalizado & Insumo de la tipología del \emph{benchmark} \\
+    A4       & Expectativas normativas & Insumo para la discusión (Cap.~\ref{cap:discusion}) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Análisis cuantitativo}
+\label{sec:analisis-cuantitativo}
+
+Las respuestas a los ítems Likert se trataron como variables ordinales. En
+consecuencia, el análisis descriptivo reporta distribuciones de frecuencia,
+medianas y rangos intercuartílicos por ítem y por bloque, en lugar de medias y
+desviaciones estándar, cuya interpretación presupone una escala de intervalo.
+Antes del análisis se recodificaron los ítems invertidos (L5 y L7) y se
+verificó la consistencia interna de cada bloque mediante el coeficiente alfa
+de Cronbach, reportado con carácter descriptivo dada la brevedad de los
+bloques [PENDIENTE: reportar valores].
+
+Para explorar si las percepciones varían según el origen socioeconómico, las
+respuestas se compararon entre los grupos definidos por las variables proxy
+(D6 y D7) mediante pruebas no paramétricas: U de Mann--Whitney para
+comparaciones entre dos grupos y H de Kruskal--Wallis para más de dos, con un
+nivel de significancia de $\alpha = 0.05$. Dado el carácter no probabilístico
+de la muestra, estos contrastes se interpretan como descriptivos de la muestra
+obtenida y no como pruebas de hipótesis poblacionales; se reportan junto con
+sus tamaños de efecto para facilitar la lectura de la magnitud de las
+diferencias [PENDIENTE: completar con los resultados].
+
+\subsection{Análisis del corpus textual}
+\label{sec:analisis-corpus}
+
+Las respuestas a las preguntas abiertas se estructuraron en un corpus textual
+sobre el que se aplicó la siguiente canalización de procesamiento, implementada
+en Python [DECIDIR: fijar versiones de bibliotecas al ejecutar]:
+
+\begin{enumerate}
+  \item \textbf{Limpieza y normalización.} Tokenización y lematización con
+    \texttt{spaCy} (modelo \texttt{es\_core\_news}), eliminación de palabras
+    funcionales y normalización a minúsculas. Una decisión metodológica
+    relevante: la normalización se aplicó únicamente sobre la copia de trabajo
+    destinada al análisis automático; el texto original de cada respuesta se
+    preservó íntegro ---incluidas sus variantes ortográficas---, tanto porque
+    esas variantes pueden ser informativas para el objeto de estudio como para
+    permitir la cita textual fiel.
+  \item \textbf{Análisis de frecuencia.} Frecuencias absolutas y relativas de
+    términos y bigramas por pregunta, y ponderación TF--IDF para identificar
+    el vocabulario distintivo de cada una.
+  \item \textbf{Modelado de temas.} Identificación de temas recurrentes
+    mediante asignación latente de Dirichlet (LDA) y, de manera
+    complementaria, \texttt{BERTopic} sobre representaciones contextuales en
+    español. El número de temas se seleccionó mediante métricas de coherencia
+    y revisión manual de interpretabilidad
+    [PENDIENTE: reportar configuración y temas resultantes].
+  \item \textbf{Análisis de sentimiento.} Clasificación de polaridad con un
+    modelo preentrenado para español [DECIDIR: candidato:
+    \texttt{pysentimiento}; confirmar al ejecutar], aplicada a las respuestas
+    de experiencias (A1--A2) para caracterizar la carga afectiva de las
+    narraciones.
+\end{enumerate}
+
+El producto final de este análisis es doble: una caracterización temática y
+afectiva de las percepciones (reportada en la
+Sección~\ref{sec:resultados-encuesta}) y, a partir del ítem A3, un inventario
+de rasgos lingüísticos percibidos como penalizados, que constituye el punto de
+partida empírico de la tipología de variaciones del \emph{benchmark}
+(Sección~\ref{sec:benchmark-diseno}).
+
+\section{Diseño del conjunto de textos controlados}
+\label{sec:benchmark-diseno}
+
+\subsection{Principio de control}
+
+El \emph{benchmark} se construye respetando el siguiente principio: dos textos
+$t$ y $t'$ del conjunto se consideran un \emph{par controlado} si y sólo si su
+contenido informativo es operativamente equivalente y difieren únicamente en
+el registro lingüístico. La equivalencia informativa se verifica mediante
+revisión humana y, complementariamente, mediante una medida de similitud
+semántica sobre representaciones vectoriales.
+
+\subsection{Tipos de variación lingüística considerados}
+
+[Tipología de variaciones a operacionalizar, derivada del análisis de la
+encuesta y de la literatura: léxico formal vs.\ coloquial, presencia de
+errores ortográficos, uso de anglicismos, longitud oracional, marcadores
+discursivos, etc.]
+
+\subsection{Procedimiento de construcción}
+
+[Pasos para construir los pares controlados: redacción inicial, reescritura
+con guía estilística, validación por jueces, control de calidad.]
+
+\subsection{Tamaño y composición del \textit{benchmark}}
+
+[Cantidad de textos, número de pares por tipo de variación, distribución de
+etiquetas objetivo (en caso de tarea supervisada).]
+
+\section{Evaluación experimental}
+\label{sec:experimentos}
+
+\subsection{Modelos evaluados}
+
+[Selección de modelos: al menos un clasificador lineal sobre TF--IDF, al
+menos un modelo basado en \textit{transformers} preentrenado en español
+(\textit{p.\ ej.,} BETO, RoBERTa en español), y opcionalmente un modelo de
+lenguaje grande utilizado como clasificador \textit{zero-shot}.]
+
+\subsection{Tarea de clasificación}
+
+[Definición exacta de la tarea: etiquetas, definiciones operativas, ejemplos.]
+
+\subsection{Protocolo experimental}
+
+\begin{enumerate}
+  \item Para cada modelo $f$ y cada par controlado $(t, t')$, se obtienen las
+    predicciones $f(t)$ y $f(t')$ y, cuando es posible, las probabilidades
+    asociadas $p_f(\cdot \mid t)$ y $p_f(\cdot \mid t')$.
+  \item Se calculan métricas estándar de comportamiento agregado por
+    \emph{condición de registro}.
+  \item Se calcula el \INS según la definición del Capítulo~\ref{cap:ins}.
+\end{enumerate}
+
+\subsection{Reproducibilidad}
+
+[Política de versiones de modelos y bibliotecas; semillas aleatorias;
+disposición del código y del \emph{benchmark}.]
+
+\section{Consideraciones éticas}
+\label{sec:etica}
+
+Las decisiones éticas de esta investigación se concentran en dos frentes: el
+tratamiento de las personas participantes en la encuesta y el uso responsable
+de los artefactos producidos.
+
+Respecto a las personas participantes, la encuesta se aplicó únicamente a
+mayores de edad, con participación voluntaria y posibilidad de abandono en
+cualquier momento sin consecuencia alguna. El cuestionario abre con un
+consentimiento informado que declara el propósito académico del estudio, la
+institución y los responsables, y las condiciones de uso de las respuestas; el
+formulario no puede completarse sin aceptarlo expresamente. El instrumento no
+solicita nombre, correo, teléfono ni ningún otro dato que permita la
+identificación directa de la persona, y las variables sociodemográficas se
+recogen en categorías agregadas. Los resultados cuantitativos se reportan
+exclusivamente de forma agregada. Las respuestas abiertas pueden citarse
+textualmente en este documento, sin atribución; antes de citar cualquier
+fragmento se verificó que no contuviera detalles que permitieran la
+reidentificación indirecta (nombres de terceros, empresas o lugares
+específicos), suprimiéndolos cuando fue necesario
+[PENDIENTE: confirmar tras la selección final de citas]. Los datos crudos se
+almacenaron en la plataforma del formulario y en una copia local de acceso
+restringido al investigador y su asesor, y se conservarán únicamente durante
+el desarrollo de la tesis [DECIDIR: confirmar con el asesor si la Facultad
+requiere aval de algún comité o registro adicional para encuestas anónimas de
+bajo riesgo].
+
+Respecto a los artefactos, el \emph{benchmark} de pares controlados merece una
+consideración específica. Por construcción, contiene textos redactados en
+registros socialmente estigmatizados; su propósito es auditar sistemas de
+clasificación, pero un conjunto así podría, en principio, emplearse en sentido
+contrario ---por ejemplo, para entrenar deliberadamente un clasificador que
+penalice esos registros. Para reducir ese riesgo, el \emph{benchmark} se
+documenta y distribuye con una declaración explícita de uso previsto
+(auditoría y evaluación de equidad), siguiendo la práctica de documentación de
+conjuntos de datos discutida en la literatura, y los textos que lo integran
+son simulados: ningún par proviene de currículums ni de textos reales de
+personas. Finalmente, los experimentos del Capítulo~\ref{cap:resultados}
+evalúan modelos preentrenados disponibles públicamente y no implican
+recolección adicional de datos personales.
