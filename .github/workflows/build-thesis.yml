@@ -4,9 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '**.tex'
-      - '**.bib'
-      - 'figures/**'
+      - 'tesis/**'
       - 'scripts/**'
       - 'requirements.txt'
   pull_request:
@@ -34,14 +32,15 @@ jobs:
       - name: Compilar LaTeX a PDF
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: main.tex
+          root_file: tesis/tesis.tex
+          work_in_root_file_dir: true
           latexmk_use_xelatex: false
 
       - name: Subir PDF como artefacto
         uses: actions/upload-artifact@v4
         with:
           name: tesis-pdf
-          path: main.pdf
+          path: tesis/tesis.pdf
           retention-days: 30
 
   release:
@@ -60,7 +59,7 @@ jobs:
           tag_name: latest
           name: "Última versión de la tesis"
           body: "PDF generado automáticamente desde el último commit en main."
-          files: main.pdf
+          files: tesis.pdf
           make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -2,9 +2,10 @@
 # Makefile para compilar la tesis (LaTeX) y ejecutar scripts (Python)
 # =============================================================================
 
-MAIN = main
+TESIS_DIR = tesis
+MAIN = $(TESIS_DIR)/tesis
 LATEX = pdflatex
-BIBER = biber
+BIBTEX = bibtex
 PYTHON = python3
 
 # --- Targets principales ---
@@ -18,16 +19,16 @@ pdf: $(MAIN).pdf  ## Compila el documento LaTeX
 figures:  ## Ejecuta los scripts de Python para generar figuras
 	$(PYTHON) scripts/generate_figures.py
 
-$(MAIN).pdf: $(MAIN).tex references.bib chapters/*.tex
-	$(LATEX) $(MAIN)
-	$(BIBER) $(MAIN)
-	$(LATEX) $(MAIN)
-	$(LATEX) $(MAIN)
+$(MAIN).pdf: $(MAIN).tex $(TESIS_DIR)/referencias.bib $(TESIS_DIR)/capitulos/*.tex
+	cd $(TESIS_DIR) && $(LATEX) tesis
+	cd $(TESIS_DIR) && $(BIBTEX) tesis
+	cd $(TESIS_DIR) && $(LATEX) tesis
+	cd $(TESIS_DIR) && $(LATEX) tesis
 
 clean:  ## Limpia archivos auxiliares de LaTeX y Python
-	rm -f *.aux *.bbl *.blg *.brf *.fdb_latexmk *.fls *.idx *.ilg *.ind
-	rm -f *.lof *.log *.lot *.nav *.out *.snm *.synctex.gz *.toc *.vrb
-	rm -f *.bcf *.run.xml *.xdv
+	cd $(TESIS_DIR) && rm -f *.aux *.bbl *.blg *.brf *.fdb_latexmk *.fls *.idx *.ilg *.ind
+	cd $(TESIS_DIR) && rm -f *.lof *.log *.lot *.nav *.out *.snm *.synctex.gz *.toc *.vrb
+	cd $(TESIS_DIR) && rm -f *.bcf *.run.xml *.xdv
 	rm -rf __pycache__ scripts/__pycache__
 
 help:  ## Muestra esta ayuda
