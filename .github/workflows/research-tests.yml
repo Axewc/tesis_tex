@@ -1,0 +1,35 @@
+name: Pruebas (research)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'research/**'
+      - '.github/workflows/research-tests.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/**'
+      - '.github/workflows/research-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Solo lo que las pruebas necesitan hoy (el requirements completo
+      # incluye spacy/jupyter, innecesarios y lentos en CI). Si un script
+      # nuevo agrega dependencias, añadirlas también aquí.
+      - name: Instalar dependencias de prueba
+        run: pip install numpy pytest
+
+      - name: Ejecutar pruebas
+        run: python3 -m pytest research/tests/ -v

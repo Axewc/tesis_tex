@@ -1,5 +1,5 @@
 # =============================================================================
-# Makefile para compilar la tesis (LaTeX) y ejecutar scripts (Python)
+# Makefile para compilar la tesis (LaTeX) y correr las pruebas (Python)
 # =============================================================================
 
 TESIS_DIR = tesis
@@ -10,16 +10,16 @@ PYTHON = python3
 
 # --- Targets principales ---
 
-.PHONY: all pdf figures clean help
+.PHONY: all pdf test clean help
 
-all: figures pdf  ## Genera figuras y compila el PDF
+all: pdf  ## Compila el PDF de la tesis
 
 pdf: $(MAIN).pdf  ## Compila el documento LaTeX
 
-figures:  ## Ejecuta los scripts de Python para generar figuras
-	$(PYTHON) scripts/generate_figures.py
+test:  ## Corre las pruebas del código de research/
+	$(PYTHON) -m pytest research/tests/ -v
 
-$(MAIN).pdf: $(MAIN).tex $(TESIS_DIR)/referencias.bib $(TESIS_DIR)/capitulos/*.tex
+$(MAIN).pdf: $(TESIS_DIR)/*.tex $(TESIS_DIR)/capitulos/*.tex $(TESIS_DIR)/frontmatter/*.tex $(TESIS_DIR)/apendices/*.tex $(TESIS_DIR)/referencias.bib
 	cd $(TESIS_DIR) && $(LATEX) tesis
 	cd $(TESIS_DIR) && $(BIBTEX) tesis
 	cd $(TESIS_DIR) && $(LATEX) tesis
@@ -29,7 +29,7 @@ clean:  ## Limpia archivos auxiliares de LaTeX y Python
 	cd $(TESIS_DIR) && rm -f *.aux *.bbl *.blg *.brf *.fdb_latexmk *.fls *.idx *.ilg *.ind
 	cd $(TESIS_DIR) && rm -f *.lof *.log *.lot *.nav *.out *.snm *.synctex.gz *.toc *.vrb
 	cd $(TESIS_DIR) && rm -f *.bcf *.run.xml *.xdv
-	rm -rf __pycache__ scripts/__pycache__
+	rm -rf __pycache__ research/scripts/__pycache__ research/tests/__pycache__ .pytest_cache
 
 help:  ## Muestra esta ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \

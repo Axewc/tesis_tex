@@ -24,7 +24,14 @@ Cada rama tiene su propio README con instrucciones.
   y registro de versiones.
 - **Código** (`research/`): se edita localmente (VS Code / Claude Code) y
   se commitea directamente. Correr pruebas antes de cada commit:
-  `python3 -m pytest research/tests/ -v`
+  `make test` (o `python3 -m pytest research/tests/ -v`).
+- **Figuras**: los scripts de `research/` guardan sus salidas en
+  `research/results/`; las que entran al documento se copian a
+  `tesis/imagenes/` y se commitean (así el PDF compila sin correr Python).
+- **CI (GitHub Actions)**:
+  - `build-thesis.yml` — cambios en `tesis/` compilan el PDF; en cada push
+    a `main` se publica en el release [`latest`](../../releases/latest).
+  - `research-tests.yml` — cambios en `research/` corren las pruebas.
 - **Roadmap**: tablero Kanban en Notion ("Tesis — Roadmap (Sesgo Sociolectal)"),
   30+ tareas en 7 fases con dependencias.
 
