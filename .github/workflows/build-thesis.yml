@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'tesis/**'
-      - 'scripts/**'
-      - 'requirements.txt'
+      - '.github/workflows/build-thesis.yml'
   pull_request:
     branches: [main]
+    paths:
+      - 'tesis/**'
+      - '.github/workflows/build-thesis.yml'
   workflow_dispatch:
 
 jobs:
@@ -17,17 +19,6 @@ jobs:
     steps:
       - name: Checkout repositorio
         uses: actions/checkout@v4
-
-      - name: Instalar Python y dependencias
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Instalar paquetes Python
-        run: pip install -r requirements.txt
-
-      - name: Generar figuras con Python
-        run: python scripts/generate_figures.py
 
       - name: Compilar LaTeX a PDF
         uses: xu-cheng/latex-action@v3

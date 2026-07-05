@@ -27,6 +27,8 @@
 
 # Generated PDF (built by GitHub Actions, no need to track)
 *.pdf
+# ...pero las figuras/logos vectoriales del documento sí se versionan
+!tesis/imagenes/*.pdf
 
 # latexmk
 *.latexmk
@@ -53,6 +55,13 @@ dist/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
+
+# Datos de encuesta: NUNCA se versionan (ver research/README.md, "Regla de oro")
+research/data/*
+!research/data/.gitkeep
+
+# pytest
+.pytest_cache/
 
 # IDE / Editor
 .vscode/

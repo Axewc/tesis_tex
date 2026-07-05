@@ -5,7 +5,9 @@ Código, datos y experimentos. La tesis (LaTeX) vive en `../tesis/`.
 ## Estructura
 - `scripts/` — código de producción (limpio, probado)
   - `ins_calculator.py` — calculador del INS (Cap. 5 de la tesis)
-- `tests/` — pruebas unitarias (`python3 -m pytest research/tests/ -v`)
+- `tests/` — pruebas unitarias (`make test` desde la raíz, o
+  `python3 -m pytest research/tests/ -v`); también corren en CI al tocar
+  `research/`
 - `data/` — datos crudos y procesados (**no se versiona**: ver .gitignore raíz)
 - `notebooks/` — exploración en Jupyter
 - `results/` — salidas, figuras, benchmarks calculados
